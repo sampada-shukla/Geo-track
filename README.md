@@ -1,1 +1,1 @@
-# Tutorial page for Geo-track.
+Tutorial page for Geo-track.
