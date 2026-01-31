@@ -675,54 +675,41 @@ export default function TutorialPage() {
                         }}
                       >
                         {/* Staggered Animation Wrapper */}
-                        <motion.div
-                          initial={{ opacity: 0, y: 60, scale: 0.9 }}
-                          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                          transition={{
-                            duration: 0.7,
-                            delay: stepIndex * 0.12,
-                            ease: [0.25, 0.46, 0.45, 0.94],
-                          }}
-                          viewport={{ once: false, margin: '-80px', amount: 0.3 }}
-                          style={{ height: '100%' }}
-                        >
-                          <div
-                            style={{
-                              position: 'relative',
-                              overflow: 'visible',
-                            }}
-                          >
-                            <motion.div
-                              animate={{
-                                rotateY: !isMobile && isHovered ? -8 : 0,
-                                rotateX: !isMobile && isHovered ? 4 : 0,
-                                scale: !isMobile && isHovered ? 1.05 : 1,
-                              }}
-                              transition={{ type: 'spring', stiffness: 120, damping: 12 }}
-                              style={{
-                                borderRadius: 0,
-                                overflow: 'visible',
-                                boxShadow: 'none',
-                              }}
-                            >
-                              <motion.img
-                                key={activeImageIndex[step.number] ?? 0}
-                                src={images[activeImageIndex[step.number] ?? 0]}
-                                alt={step.title}
-                                initial={{ opacity: 0, x: 50 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -50 }}
-                                transition={{ duration: 0.5, ease: 'easeInOut' }}
-                                style={{
-                                  width: '100%',
-                                  height: isMobile ? 'auto' : isTablet ? '600px' : '680px',
-                                  objectFit: 'cover',
-                                  background: 'transparent',
-                                  display: 'block',
-                                }}
-                              />
-                            </motion.div>
-                          </div>
+<motion.div
+  initial={{ opacity: 0, y: 60 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{
+    duration: 0.6,
+    ease: 'easeOut',
+  }}
+  viewport={{
+    once: true,
+    amount: 0.25,
+  }}
+>
+  <div
+    style={{
+      position: 'relative',
+      overflow: 'visible',
+    }}
+  >
+    <div style={{ transition: 'transform 0.25s ease' }}>
+      <motion.img
+        key={activeImageIndex[step.number] ?? 0}
+        src={images[activeImageIndex[step.number] ?? 0]}
+        alt={step.title}
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -50 }}
+        transition={{ duration: 0.5, ease: 'easeInOut' }}
+        style={{
+          width: '100%',
+          height: isMobile ? 'auto' : isTablet ? '600px' : '680px',
+          objectFit: 'cover',
+          display: 'block',
+        }}
+      />
+    </div>
 
                           {/* POPUP DESCRIPTION */}
                           {showPopup && (
@@ -822,31 +809,10 @@ export default function TutorialPage() {
                                     </li>
                                   ))}
                                 </ul>
-                              )}
-
-                              {isMobile && (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setActiveCard(null);
-                                  }}
-                                  style={{
-                                    marginTop: '1rem',
-                                    padding: '0.5rem 1rem',
-                                    background: 'rgba(255,255,255,0.2)',
-                                    border: '1px solid rgba(255,255,255,0.3)',
-                                    borderRadius: '0.5rem',
-                                    color: 'white',
-                                    fontSize: '0.85rem',
-                                    cursor: 'pointer',
-                                    width: '100%',
-                                  }}
-                                >
-                                  Close
-                                </button>
-                              )}
+                              )}  
                             </motion.div>
                           )}
+                          </div>
                         </motion.div>
                       </div>
                     );
