@@ -21,7 +21,7 @@ import {
 import { motion } from 'motion/react';
 
 
-import geotrack from "../assets/geotrack.png";
+import logoImage from "../assets/geotrack.png";
 
 import app_launch from "./assets1/app_launch.png";
 import login from "./assets1/login.png";
@@ -54,7 +54,7 @@ import { Footer} from './Footer';
 const tutorialSections = [
   {
     sectionId: 1,
-    sectionTitle: '🎯 1. Sign-In & Account Creation',
+    sectionTitle: '1. Sign-In & Account Creation',
     sectionDescription: 'Get started by creating your account and setting up your profile',
     steps: [
       {
@@ -106,7 +106,7 @@ const tutorialSections = [
   },
   {
     sectionId: 2,
-    sectionTitle: '🔑 2. Permission Setup',
+    sectionTitle: '2. Permission Setup',
     sectionDescription: 'Allow necessary permissions for seamless app functionality',
     steps: [
       {
@@ -132,7 +132,7 @@ const tutorialSections = [
   },
   {
     sectionId: 3,
-    sectionTitle: '🗺️ 3.Map Screen & Client Tracking',
+    sectionTitle: '3.Map Screen & Client Tracking',
     sectionDescription: 'View your location and track nearby clients on the map',
     steps: [
       {
@@ -159,7 +159,7 @@ const tutorialSections = [
   },
   {
     sectionId: 4,
-    sectionTitle: '💼 4. Meeting Management',
+    sectionTitle: '4. Meeting Management',
     sectionDescription: 'Start, manage, and complete client meetings efficiently',
     steps: [
       {
@@ -195,7 +195,7 @@ const tutorialSections = [
   },
   {
     sectionId: 5,
-    sectionTitle: '👤 5. Client Detail View',
+    sectionTitle: '5. Client Detail View',
     sectionDescription: 'Access complete client information and history',
     steps: [
       {
@@ -210,7 +210,7 @@ const tutorialSections = [
   },
   {
     sectionId: 6,
-    sectionTitle: '🚗 6. Trip & Expense Management',
+    sectionTitle: '6. Trip & Expense Management',
     sectionDescription: 'Track your trips and manage expenses efficiently',
     steps: [
       {
@@ -251,7 +251,7 @@ const tutorialSections = [
   },
   {
     sectionId: 7, 
-    sectionTitle: '📍 7. Client Marker Status on Map',
+    sectionTitle: '7. Client Marker Status on Map',
     sectionDescription: 'Client markers on map indicate visit status and priority.',
     steps: [
       {
@@ -272,7 +272,7 @@ const tutorialSections = [
   },
   {
     sectionId: 8,
-    sectionTitle: '👥 Client Screen',
+    sectionTitle: 'Client Screen',
     sectionDescription: 'Manage and organize all your clients in one place',
     steps: [
       {
@@ -301,7 +301,7 @@ const tutorialSections = [
   },
   {
     sectionId: 9,
-    sectionTitle: '📈 9. Activity Screen',
+    sectionTitle: '9. Activity Screen',
     sectionDescription: 'Track all your activities and movements',
     steps: [
       {
@@ -316,7 +316,7 @@ const tutorialSections = [
   },
   {
     sectionId: 10,
-    sectionTitle: '⚙️ 10. Profile & Settings',
+    sectionTitle: '10. Profile & Settings',
     sectionDescription: 'Manage your account preferences and information',
     steps: [
       {
@@ -338,11 +338,36 @@ const tutorialSections = [
     ],
   },
 ];
+
 export default function TutorialPage() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [activeCard, setActiveCard] = useState<number | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState<{ [key: number]: number }>({});
-  const [popupSide, setPopupSide] = useState('right');
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
 
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.href =
+      'https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -358,517 +383,535 @@ export default function TutorialPage() {
         });
         return updated;
       });
-    }, 3000); // Change image every 3 seconds
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
 
+  const handleCardInteraction = (stepNumber: number) => {
+    if (isMobile) {
+      setActiveCard(activeCard === stepNumber ? null : stepNumber);
+    }
+  };
+
   return (
-    <div style={{ minHeight: '100vh', background: 'white', position: 'relative' }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(180deg, #e0f7fa 0%, #ffffff 40%, #ffffff 100%)',
+        position: 'relative',
+        fontFamily: '"Inter", sans-serif',
+      }}
+    >
       {/* Background */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom right, white, rgb(236, 254, 255), white)', opacity: 0.8 }} />
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(135deg, rgba(224,247,250,0.3) 0%, rgba(255,255,255,0) 50%)',
+            opacity: 0.6,
+          }}
+        />
       </div>
 
       <div style={{ position: 'relative', zIndex: 10 }}>
-        {/* Hero Section with Left-Right Layout */}
-        <section style={{ padding: '3rem 1rem' }}>
-          <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: '1.2fr 1fr', 
-              gap: '6rem', 
-              alignItems: 'center' 
-            }}>
+        {/* Hero Section */}
+        <section
+          style={{
+            padding: isMobile ? '2rem 1rem' : isTablet ? '2.5rem 1.5rem' : '3rem 1.5rem',
+            minHeight: isMobile ? 'auto' : '500px',
+            display: 'flex',
+            alignItems: 'center',
+            background: 'linear-gradient(135deg, #ecfeff 0%, #ffffff 50%, #ecfeff 100%)',
+          }}
+        >
+          <div
+            style={{
+              maxWidth: '1280px',
+              margin: '0 auto',
+              width: '100%',
+              padding: isMobile ? '0 0.5rem' : '0 1.5rem',
+            }}
+          >
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr' : '1.1fr 0.9fr',
+                gap: isMobile ? '2rem' : isTablet ? '2.5rem' : '3rem',
+                alignItems: 'center',
+              }}
+            >
               {/* LEFT: Text Content */}
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                  <img src={geotrack} alt="GeoTrack Logo" style={{ width: '7.5rem', height: '7.5rem', objectFit: 'contain' }} />
-                </div>
-
-                <h1 style={{fontFamily:'Segoe UI', fontSize: '3.25rem', fontWeight: 800,marginBottom: '1.5rem',lineHeight: '1.1',letterSpacing: '-0.02em' }}>
-                  <span style={{ color: 'rgb(6, 182, 212)',fontWeight: 900 }}>Explore GeoTrack</span>{' '}
-                  <span style={{ color: 'rgb(30, 41, 59)' }}>with Detailed Step-by-Step Tutorials</span>
-                </h1>
-                
-                <p style={{ fontSize: '1.25rem',color: 'rgb(75, 85, 99)',marginBottom: '2rem',lineHeight: '1.7',maxWidth: '42rem' }}>
-                  Learn how to streamline operations, boost productivity, and scale faster with comprehensive tutorials covering setup, configuration, and advanced features.
-                </p>
-
+              <div style={{ maxWidth: isMobile ? '100%' : '650px' }}>
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  style={{
+                    fontFamily: '"Poppins", sans-serif',
+                    fontSize: isMobile ? '28px' : isTablet ? '36px' : '48px',
+                    fontWeight: 700,
+                    marginBottom: '1rem',
+                    lineHeight: isMobile ? '38px' : isTablet ? '46px' : '58px',
+                    letterSpacing: '-0.025em',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '1rem',
+                      marginBottom: isMobile ? '1rem' : '1.5rem',
+                    }}
+                  >
+                    <img
+                      src={logoImage}
+                      alt="Geotrack Logo"
+                      style={{
+                        width: isMobile ? '4.5rem' : isTablet ? '6rem' : '7.5rem',
+                        height: isMobile ? '4.5rem' : isTablet ? '6rem' : '7.5rem',
+                        objectFit: 'contain',
+                      }}
+                    />
+                  </div>
+                  <span style={{ color: 'rgb(6, 182, 212)', fontWeight: 900 }}>Explore Geotrack</span>{' '}
+                  <span style={{ color: '#0F172A' }}>with Detailed Step-by-Step Tutorials</span>
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  style={{
+                    fontFamily: '"Inter", sans-serif',
+                    fontSize: isMobile ? '14px' : '16px',
+                    fontWeight: 400,
+                    color: '#475569',
+                    marginBottom: '1.5rem',
+                    lineHeight: isMobile ? '22px' : '26px',
+                  }}
+                >
+                  Learn how to streamline operations, boost productivity, and scale faster with comprehensive tutorials
+                  covering setup, configuration, and advanced features.
+                </motion.p>
                 {/* Feature List */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}
+                >
                   {[
                     'Quick start guides for instant setup',
                     'Advanced feature walkthroughs',
                     'How it works steps for smooth onboarding',
-                  ].map((feature) => (
-                    <div key={feature} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      <CheckCircle style={{ width: '1.5rem', height: '1.5rem', color: 'rgb(6, 182, 212)', flexShrink: 0 }} />
-                      <span style={{ fontSize: '1.1rem', color: 'rgb(55, 65, 81)' }}>{feature}</span>
-                    </div>
+                  ].map((feature, idx) => (
+                    <motion.div
+                      key={feature}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.4, delay: 0.5 + idx * 0.1 }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}
+                    >
+                      <div
+                        style={{
+                          width: isMobile ? '1.75rem' : '2.25rem',
+                          height: isMobile ? '1.75rem' : '2.25rem',
+                          borderRadius: '0.5rem',
+                          background: 'rgba(6, 182, 212, 0.15)',
+                          border: '2px solid rgb(6, 182, 212)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                        }}
+                      >
+                        <CheckCircle
+                          style={{
+                            width: isMobile ? '1rem' : '1.25rem',
+                            height: isMobile ? '1rem' : '1.25rem',
+                            color: 'rgb(6, 182, 212)',
+                          }}
+                        />
+                      </div>
+                      <span
+                        style={{
+                          fontFamily: "'Inter', sans-serif",
+                          fontSize: isMobile ? '14px' : '16px',
+                          fontWeight: 500,
+                          color: '#475569',
+                          lineHeight: isMobile ? '22px' : '26px',
+                        }}
+                      >
+                        {feature}
+                      </span>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
               </div>
 
-              {/* RIGHT: Video Card */}
-<motion.div
-  style={{
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center'
-  }}
-  animate={{ y: [0, -14, 0] }}
-  transition={{
-    duration: 4,
-    repeat: Infinity,
-    ease: 'easeInOut',
-  }}
->
-  <div
-    style={{
-      background: 'white',
-      borderRadius: '1.75rem',
-      boxShadow: '0 30px 60px -15px rgba(0, 0, 0, 0.25)',
-      overflow: 'hidden',
-      border: '1px solid rgb(243, 244, 246)',
-      width: '100%',
-      maxWidth: '640px', // 🔥 INCREASED SIZE
-    }}
-  >
-    {/* VIDEO PREVIEW */}
-    <div
-      style={{
-        position: 'relative',
-        height: '300px', // 🔥 TALLER VIDEO AREA
-        background:
-          'linear-gradient(to bottom right, rgb(219, 234, 254), rgb(207, 250, 254))',
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <div style={{ textAlign: 'center' }}>
-          <button
-            style={{
-              width: '5.5rem',
-              height: '5.5rem',
-              background: 'rgb(6, 182, 212)',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)',
-              border: 'none',
-              cursor: 'pointer',
-              margin: '0 auto 1.75rem',
-              transition: 'background 0.3s',
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.background = 'rgb(8, 145, 178)')
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.background = 'rgb(6, 182, 212)')
-            }
-          >
-            <Play
-              style={{
-                width: '2.75rem',
-                height: '2.75rem',
-                color: 'white',
-                marginLeft: '0.25rem',
-              }}
-              fill="white"
-            />
-          </button>
-
-          <p
-            style={{
-              marginTop: '1.25rem',
-              color: 'rgb(55, 65, 81)',
-              fontWeight: 600,
-              fontSize: '1.15rem',
-            }}
-          >
-            Getting Started with Geotrack
-          </p>
-          <p
-            style={{
-              fontSize: '0.9rem',
-              color: 'rgb(107, 114, 128)',
-              marginTop: '0.25rem',
-            }}
-          >
-            Duration: 5:32
-          </p>
-        </div>
-      </div>
-    </div>
-
-    {/* VIDEO INFO */}
-    <div style={{ padding: '2.25rem' }}>
-      <h3
-        style={{
-          fontSize: '1.5rem',
-          color: 'rgb(30, 41, 59)',
-          marginBottom: '0.75rem',
-          fontWeight: 700,
-        }}
-      >
-        Welcome to GeoTrack Tutorial
-      </h3>
-
-      <p
-        style={{
-          color: 'rgb(75, 85, 99)',
-          marginBottom: '1.75rem',
-          lineHeight: '1.65',
-        }}
-      >
-        Learn how to set up your account, configure tracking parameters, and
-        start monitoring your assets in just a few minutes.
-      </p>
-
-      <button
-        style={{
-          width: '100%',
-          padding: '0.85rem 1rem',
-          background: 'rgb(30, 41, 59)',
-          color: 'white',
-          borderRadius: '0.75rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '0.5rem',
-          boxShadow: '0 12px 18px -6px rgba(0, 0, 0, 0.15)',
-          border: 'none',
-          cursor: 'pointer',
-          fontWeight: 600,
-          transition: 'all 0.3s',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgb(15, 23, 42)';
-          e.currentTarget.style.transform = 'translateY(-2px)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'rgb(30, 41, 59)';
-          e.currentTarget.style.transform = 'translateY(0)';
-        }}
-      >
-        Watch Full Tutorial Series
-        <ExternalLink style={{ width: '1.25rem', height: '1.25rem' }} />
-      </button>
-    </div>
-  </div>
-</motion.div>
- </div>
+              {/* RIGHT: Enhanced Video Card */}
+              <motion.div
+                style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+                animate={isMobile ? {} : { y: [0, -12, 0] }}
+                transition={
+                  isMobile
+                    ? {}
+                    : {
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }
+                }
+              >
+                <TutorialVideo />
+              </motion.div>
+            </div>
           </div>
         </section>
+
         {/* Tutorial Section Header */}
-<section
-  style={{
-    padding: '3rem 1rem 2.5rem',
-    background: 'linear-gradient(to bottom, rgba(255,255,255,0), #f8fafc)',
-  }}
->
-  <div
-    style={{
-      maxWidth: '1100px',
-      margin: '0 auto',
-      textAlign: 'center',
-    }}
-  >
-    <h2
-      style={{
-        fontSize: '2.4rem',
-        fontWeight: 800,
-        color: '#0f172a',
-        marginBottom: '0.75rem',
-      }}
-    >
-      Complete Step-by-Step Tutorial
-    </h2>
-
-    <p
-      style={{
-        fontSize: '1rem',
-        color: '#475569',
-        maxWidth: '720px',
-        margin: '0 auto',
-        lineHeight: 1.6,
-      }}
-    >
-      Master GeoTrack with our comprehensive guide covering every feature
-      from sign-up to advanced functionality
-    </p>
-  </div>
-</section>
-<section style={{ padding: '3rem 1rem' }}>
-  <div style={{ maxWidth: '90rem', margin: '0 auto' }}>
-    {tutorialSections.map((section) => (
-      <div key={section.sectionId} style={{ marginBottom: '2rem' }}>
-        <h3 style={{ fontSize: '1.9rem', fontWeight: 800, color: '#1e293b' }}>
-          {section.sectionTitle}
-        </h3>
-        <p style={{ color: '#475569', marginBottom: '1.5rem' }}>
-          {section.sectionDescription}
-        </p>
-
-        <div
-  style={{
-    display: 'flex',
-    gap:  '6rem',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    paddingTop: '2rem',
-    paddingInline: '6rem', 
-  }}
->
-  {section.steps.map((step, stepIndex) => {
-    const Icon = step.icon;
-    const isHovered = hoveredCard === step.number;
-
-    const images = step.multiImages ? step.images : [step.image];
-    const isSingleImage = !step.multiImages;
-
-    return (
-      <div
-        key={step.number}
-        onMouseEnter={() => setHoveredCard(step.number)}
-        onMouseLeave={() => setHoveredCard(null)}
-        style={{
-          position: 'relative',
-          width: '340px',
-          perspective: '1200px',
-          margin: '0 auto',
-        }}
-      >
-        {/* Staggered Animation Wrapper */}
-        <motion.div
-          initial={{ opacity: 0, y: 60, scale: 0.9 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ 
-            duration: 0.7, 
-            delay: (stepIndex * 0.12),
-            ease: [0.25, 0.46, 0.45, 0.94]
-          }}
-          viewport={{ once: false, margin: '-80px', amount: 0.3 }}
-          style={{ height: '100%' }}
-        >
-          {/* 🔥 ADD THIS WRAPPER HERE */}
-<div
-  style={{
-    position: 'relative',
-    overflow: 'visible',
-  }}
-></div>
-        <motion.div
-          animate={{
-            rotateY: isHovered ? -8 : 0,
-            rotateX: isHovered ? 4 : 0,
-            scale: isHovered ? 1.05 : 1,
-          }}
-          transition={{ type: 'spring', stiffness: 120, damping: 12 }}
+        <section
           style={{
-            borderRadius: 0,
-            overflow: 'visible',
-            boxShadow: 'none',
-              //? '0 40px 80px rgba(0,0,0,0.55)'
-              //: '0 25px 50px rgba(0,0,0,0.35)',
-            //background: '#000',
-            //border: '8px solid #000',
+            padding: isMobile ? '1.5rem 1rem 1rem' : '2rem 1.5rem 1.5rem',
+            background: 'linear-gradient(to bottom, rgba(255,255,255,0), #f8fafc)',
           }}
         >
-          <motion.img
-            key={activeImageIndex[step.number] ?? 0}
-            src={images[activeImageIndex[step.number] ?? 0]}
-            alt={step.title}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.5, ease: 'easeInOut' }}
+          <div
             style={{
-              width: '100%',
-              height: '680px',
-              objectFit: 'cover',
-              background: 'transparent',
-              display: 'block',
-            }}
-          />
-        {/* Carousel Navigation Dots - Removed, now fully automatic */}
-        </motion.div>
-
-
-        {/* 🟨 POPUP DESCRIPTION */}
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0, x: 20, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ duration: 0.25 }}
-            style={{
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '320px',
-              background: 'rgba(15, 23, 42, 0.95)',
-              backdropFilter: 'blur(12px)',
-              borderRadius: '1.25rem',
-              padding: '1.5rem',
-              boxShadow: '0 30px 60px rgba(0,0,0,0.6)',
-              color: 'white',
-              zIndex: 99999,
-              pointerEvents: 'none',
-              whiteSpace: 'normal',
-              wordWrap: 'break-word',
+              maxWidth: '1280px',
+              margin: '0 auto',
+              textAlign: 'center',
+              padding: isMobile ? '0 0.5rem' : '0 1.5rem',
             }}
           >
-            {/* 🔢 STEP NUMBER BADGE */}
-    <div
-      style={{
-        position: 'absolute',
-        top: '-14px',
-        left: '-14px',
-        width: '42px',
-        height: '42px',
-        borderRadius: '50%',
-        background: step.iconColor,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '1.05rem',
-        fontWeight: 800,
-        color: 'white',
-        boxShadow: '0 10px 25px rgba(0,0,0,0.4)',
-      }}
-    >
-      {step.number}
-    </div>
-            <div
+            <h2
               style={{
-                width: '3rem',
-                height: '3rem',
-                borderRadius: '0.75rem',
-                background: step.iconColor,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '0.75rem',
-              }}
-            >
-              <Icon color="white" size={22} />
-            </div>
-
-            <h4
-              style={{
-                fontSize: '1.1rem',
+                fontFamily: '"Poppins", sans-serif',
+                fontSize: isMobile ? '24px' : isTablet ? '30px' : '36px',
                 fontWeight: 700,
-                marginBottom: '0.5rem',
+                color: 'rgb(20, 47, 83)',
+                marginBottom: '0.65rem',
+                lineHeight: isMobile ? '32px' : isTablet ? '38px' : '46px',
               }}
             >
-              {step.title}
-            </h4>
+              Complete Step-by-Step Guide
+            </h2>
 
             <p
               style={{
-                fontSize: '0.9rem',
-                color: 'rgba(255,255,255,0.85)',
-                lineHeight: 1.6,
+                fontFamily: '"Inter", sans-serif',
+                fontSize: isMobile ? '14px' : '16px',
+                color: '#475569',
+                maxWidth: '720px',
+                margin: '0 auto',
+                lineHeight: isMobile ? '22px' : '26px',
+                fontWeight: 400,
               }}
             >
-              {step.description}
+              Master Geotrack with our comprehensive guide covering every feature from sign-up to advanced functionality
             </p>
+          </div>
+        </section>
 
-            {step.details && (
-              <ul style={{ marginTop: '0.75rem', paddingLeft: '1rem' }}>
-                {step.details.map((d, i) => (
-                  <li
-                    key={i}
-                    style={{
-                      fontSize: '0.8rem',
-                      color: 'rgba(255,255,255,0.75)',
-                      marginBottom: '0.35rem',
-                    }}
-                  >
-                    {d}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </motion.div>
-        )}
-        </motion.div>
+        <section style={{ padding: isMobile ? '2rem 0.5rem' : isTablet ? '2.5rem 1rem' : '3rem 1rem' }}>
+          <div style={{ maxWidth: '90rem', margin: '0 auto' }}>
+            {tutorialSections.map((section) => (
+              <div key={section.sectionId} style={{ marginBottom: '0.5rem' }}>
+                <h3
+                  style={{
+                    fontFamily: '"Poppins", sans-serif',
+                    fontSize: isMobile ? '20px' : isTablet ? '24px' : '28px',
+                    fontWeight: 700,
+                    color: 'rgb(20, 47, 83)',
+                    padding: isMobile ? '0 0.5rem' : '0',
+                  }}
+                >
+                  {section.sectionTitle}
+                </h3>
+                <p
+                  style={{
+                    fontFamily: '"Inter", sans-serif',
+                    color: '#64748b',
+                    lineHeight: '1.6',
+                    fontSize: isMobile ? '13px' : '15px',
+                    padding: isMobile ? '0 0.5rem' : '0',
+                  }}
+                >
+                  {section.sectionDescription}
+                </p>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: isMobile ? '2rem' : isTablet ? '3rem' : '6rem',
+                    flexWrap: 'wrap',
+                    justifyContent: 'center',
+                    paddingTop: '2rem',
+                    paddingInline: isMobile ? '0' : isTablet ? '2rem' : '6rem',
+                  }}
+                >
+                  {section.steps.map((step, stepIndex) => {
+                    const Icon = step.icon;
+                    const isHovered = hoveredCard === step.number;
+                    const isActive = activeCard === step.number;
+                    const showPopup = isMobile ? isActive : isHovered;
+
+                    const images = step.multiImages ? step.images : [step.image];
+
+                    return (
+                      <div
+                        key={step.number}
+                        onMouseEnter={() => !isMobile && setHoveredCard(step.number)}
+                        onMouseLeave={() => !isMobile && setHoveredCard(null)}
+                        onClick={() => handleCardInteraction(step.number)}
+                        style={{
+                          position: 'relative',
+                          width: isMobile ? '95%' : isTablet ? 'calc(50% - 1.5rem)' : '340px',
+                          maxWidth: isMobile ? '400px' : 'none',
+                          perspective: '1200px',
+                          margin: '0 auto',
+                          cursor: isMobile ? 'pointer' : 'default',
+                        }}
+                      >
+                        {/* Staggered Animation Wrapper */}
+                        <motion.div
+                          initial={{ opacity: 0, y: 60, scale: 0.9 }}
+                          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                          transition={{
+                            duration: 0.7,
+                            delay: stepIndex * 0.12,
+                            ease: [0.25, 0.46, 0.45, 0.94],
+                          }}
+                          viewport={{ once: false, margin: '-80px', amount: 0.3 }}
+                          style={{ height: '100%' }}
+                        >
+                          <div
+                            style={{
+                              position: 'relative',
+                              overflow: 'visible',
+                            }}
+                          >
+                            <motion.div
+                              animate={{
+                                rotateY: !isMobile && isHovered ? -8 : 0,
+                                rotateX: !isMobile && isHovered ? 4 : 0,
+                                scale: !isMobile && isHovered ? 1.05 : 1,
+                              }}
+                              transition={{ type: 'spring', stiffness: 120, damping: 12 }}
+                              style={{
+                                borderRadius: 0,
+                                overflow: 'visible',
+                                boxShadow: 'none',
+                              }}
+                            >
+                              <motion.img
+                                key={activeImageIndex[step.number] ?? 0}
+                                src={images[activeImageIndex[step.number] ?? 0]}
+                                alt={step.title}
+                                initial={{ opacity: 0, x: 50 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -50 }}
+                                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                                style={{
+                                  width: '100%',
+                                  height: isMobile ? 'auto' : isTablet ? '600px' : '680px',
+                                  objectFit: 'cover',
+                                  background: 'transparent',
+                                  display: 'block',
+                                }}
+                              />
+                            </motion.div>
+                          </div>
+
+                          {/* POPUP DESCRIPTION */}
+                          {showPopup && (
+                            <motion.div
+                              initial={{ opacity: 0, x: isMobile ? 0 : 20, y: isMobile ? 20 : 0, scale: 0.95 }}
+                              animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+                              transition={{ duration: 0.25 }}
+                              style={{
+                                position: isMobile ? 'relative' : 'fixed',
+                                top: isMobile ? 'auto' : '50%',
+                                left: isMobile ? 'auto' : '50%',
+                                transform: isMobile ? 'none' : 'translate(-50%, -50%)',
+                                width: isMobile ? '100%' : isTablet ? '300px' : '320px',
+                                background: 'rgba(15, 23, 42, 0.95)',
+                                backdropFilter: 'blur(12px)',
+                                borderRadius: '1.25rem',
+                                padding: isMobile ? '1.25rem' : '1.5rem',
+                                boxShadow: isMobile
+                                  ? '0 10px 30px rgba(0,0,0,0.4)'
+                                  : '0 30px 60px rgba(0,0,0,0.6)',
+                                color: 'white',
+                                zIndex: isMobile ? 10 : 99999,
+                                pointerEvents: isMobile ? 'auto' : 'none',
+                                whiteSpace: 'normal',
+                                wordWrap: 'break-word',
+                                marginTop: isMobile ? '1rem' : '0',
+                              }}
+                            >
+                              {/* STEP NUMBER BADGE */}
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  top: '-14px',
+                                  left: '-14px',
+                                  width: isMobile ? '36px' : '42px',
+                                  height: isMobile ? '36px' : '42px',
+                                  borderRadius: '50%',
+                                  background: step.iconColor,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  fontSize: isMobile ? '0.9rem' : '1.05rem',
+                                  fontWeight: 800,
+                                  color: 'white',
+                                  boxShadow: '0 10px 25px rgba(0,0,0,0.4)',
+                                }}
+                              >
+                                {step.number}
+                              </div>
+                              <div
+                                style={{
+                                  width: isMobile ? '2.5rem' : '3rem',
+                                  height: isMobile ? '2.5rem' : '3rem',
+                                  borderRadius: '0.75rem',
+                                  background: step.iconColor,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  marginBottom: '0.75rem',
+                                }}
+                              >
+                                <Icon color="white" size={isMobile ? 18 : 22} />
+                              </div>
+
+                              <h4
+                                style={{
+                                  fontSize: isMobile ? '1rem' : '1.1rem',
+                                  fontWeight: 700,
+                                  marginBottom: '0.5rem',
+                                }}
+                              >
+                                {step.title}
+                              </h4>
+
+                              <p
+                                style={{
+                                  fontSize: isMobile ? '0.85rem' : '0.9rem',
+                                  color: 'rgba(255,255,255,0.85)',
+                                  lineHeight: 1.6,
+                                }}
+                              >
+                                {step.description}
+                              </p>
+
+                              {step.details && (
+                                <ul style={{ marginTop: '0.75rem', paddingLeft: '1rem' }}>
+                                  {step.details.map((d, i) => (
+                                    <li
+                                      key={i}
+                                      style={{
+                                        fontSize: isMobile ? '0.75rem' : '0.8rem',
+                                        color: 'rgba(255,255,255,0.75)',
+                                        marginBottom: '0.35rem',
+                                      }}
+                                    >
+                                      {d}
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+
+                              {isMobile && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveCard(null);
+                                  }}
+                                  style={{
+                                    marginTop: '1rem',
+                                    padding: '0.5rem 1rem',
+                                    background: 'rgba(255,255,255,0.2)',
+                                    border: '1px solid rgba(255,255,255,0.3)',
+                                    borderRadius: '0.5rem',
+                                    color: 'white',
+                                    fontSize: '0.85rem',
+                                    cursor: 'pointer',
+                                    width: '100%',
+                                  }}
+                                >
+                                  Close
+                                </button>
+                              )}
+                            </motion.div>
+                          )}
+                        </motion.div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA SECTION */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '1.25rem',
+            marginBottom: '2.5rem',
+            padding: isMobile ? '0 1rem' : '0',
+          }}
+        >
+          <button
+            onClick={() => (window.location.href = 'https://geo-track-em3s.onrender.com/dashboard')}
+            style={{
+              padding: isMobile ? '1rem 2rem' : isTablet ? '1.125rem 3rem' : '1.25rem 3.5rem',
+              background: 'rgb(30, 41, 59)',
+              color: 'white',
+              borderRadius: '1rem',
+              border: 'none',
+              fontSize: isMobile ? '1rem' : '1.125rem',
+              fontWeight: 700,
+              lineHeight: 1.3,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              boxShadow: '0 12px 30px rgba(0,0,0,0.25)',
+              transition: 'all 0.3s',
+              whiteSpace: 'nowrap',
+              width: isMobile ? '100%' : 'auto',
+              justifyContent: 'center',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgb(15, 23, 42)';
+              e.currentTarget.style.transform = 'scale(1.04)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgb(30, 41, 59)';
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
+          >
+            Go to Dashboard
+            <ArrowRight style={{ width: isMobile ? '1.4rem' : '1.6rem', height: isMobile ? '1.4rem' : '1.6rem' }} />
+          </button>
+        </div>
+        <Footer />
       </div>
-    );
-  })}
-</div>
-
-
-
-
-                
-                
-      </div>    ))}
-  </div>
-</section>
-           
-{/* CTA SECTION */}
-<div
-  style={{
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '1.25rem',
-    marginBottom: '2.5rem',
-  }}
->
-  <button
-    onClick={() =>
-      (window.location.href =
-        'https://geo-track-em3s.onrender.com/dashboard')
-    }
-    style={{
-      padding: '1.25rem 3.5rem',   
-      background: 'rgb(30, 41, 59)',
-      color: 'white',
-      borderRadius: '1rem',        
-      border: 'none',
-      fontSize: '1.125rem',
-      fontWeight: 700,
-      lineHeight: 1.3,             
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.75rem',
-      boxShadow: '0 12px 30px rgba(0,0,0,0.25)',
-      transition: 'all 0.3s',
-      whiteSpace: 'nowrap',
-    }}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.background = 'rgb(15, 23, 42)';
-      e.currentTarget.style.transform = 'scale(1.04)';
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.style.background = 'rgb(30, 41, 59)';
-      e.currentTarget.style.transform = 'scale(1)';
-    }}
-  >
-    Go to Dashboard
-    <ArrowRight style={{ width: '1.6rem', height: '1.6rem' }} />
-  </button>
-</div>
-<Footer/>
-</div>
-
 
       <style>{`
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
       `}</style>
     </div>
