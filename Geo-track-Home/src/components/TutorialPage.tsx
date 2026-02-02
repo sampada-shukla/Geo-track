@@ -650,11 +650,12 @@ export default function TutorialPage() {
                 <div
                   style={{
                     display: 'flex',
-                    gap: isMobile ? '2rem' : isTablet ? '3rem' : '6rem',
                     flexWrap: 'wrap',
                     justifyContent: 'center',
                     paddingTop: '2rem',
-                    paddingInline: isMobile ? '0' : isTablet ? '2rem' : '6rem',
+                    gap: isMobile ? '1.5rem' : isTablet ? '2.5rem' : '3rem',
+                    paddingInline: isMobile ? '0' : isTablet ? '1.5rem' : '2rem',
+
                   }}
                 >
                   {section.steps.map((step, stepIndex) => {
