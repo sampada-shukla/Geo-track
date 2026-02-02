@@ -711,7 +711,7 @@ export default function TutorialPage() {
         transition={{ duration: 0.5, ease: 'easeInOut' }}
         style={{
           width: '100%',
-          height: isMobile ? 'auto' : isTablet ? '600px' : '680px',
+          height: isMobile ? 'auto' : isTablet ? '600px' : '580px',
           objectFit: 'cover',
           display: 'block',
         }}
@@ -726,9 +726,9 @@ export default function TutorialPage() {
                               transition={{ duration: 0.25 }}
                               style={{
                                 position: isMobile ? 'relative' : 'fixed',
-                                top: isMobile ? 'auto' : '50%',
-                                left: isMobile ? 'auto' : '50%',
-                                transform: isMobile ? 'none' : 'translate(-50%, -50%)',
+                                top: isMobile ? 'auto' : '45%',
+                                left: isMobile ? 'auto' : '45%',
+                                transform: isMobile ? 'none' : 'translate(-50%, -45%)',
                                 width: isMobile ? '100%' : isTablet ? '300px' : '320px',
                                 background: 'rgba(15, 23, 42, 0.95)',
                                 backdropFilter: 'blur(12px)',
