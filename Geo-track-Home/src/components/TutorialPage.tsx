@@ -272,7 +272,7 @@ const tutorialSections = [
   },
   {
     sectionId: 8,
-    sectionTitle: 'Client Screen',
+    sectionTitle: '8. Client Screen',
     sectionDescription: 'Manage and organize all your clients in one place',
     steps: [
       {
