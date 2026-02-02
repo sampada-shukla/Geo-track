@@ -711,7 +711,7 @@ export default function TutorialPage() {
         transition={{ duration: 0.5, ease: 'easeInOut' }}
         style={{
           width: '100%',
-          height: isMobile ? 'auto' : isTablet ? '600px' : '580px',
+          height: isMobile ? 'auto' : isTablet ? '600px' : '480px',
           objectFit: 'cover',
           display: 'block',
         }}
