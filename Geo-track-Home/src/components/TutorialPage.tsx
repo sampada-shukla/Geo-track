@@ -444,10 +444,11 @@ export default function TutorialPage() {
             >
               {/* LEFT: Text Content */}
               <div style={{ maxWidth: isMobile ? '100%' : '650px' }}>
+                {/* ✅ Animated H1 with Logo */}
                 <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
                   style={{
                     fontFamily: '"Poppins", sans-serif',
                     fontSize: isMobile ? '28px' : isTablet ? '36px' : '48px',
@@ -457,7 +458,11 @@ export default function TutorialPage() {
                     letterSpacing: '-0.025em',
                   }}
                 >
-                  <div
+                  {/* ✅ Logo Animation */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.7, delay: 0.05 }}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -469,19 +474,23 @@ export default function TutorialPage() {
                       src={logoImage}
                       alt="Geotrack Logo"
                       style={{
-                        width: isMobile ? '4.5rem' : isTablet ? '6rem' : '7.5rem',
-                        height: isMobile ? '4.5rem' : isTablet ? '6rem' : '7.5rem',
+                        width: isMobile ? '5rem' : isTablet ? '6rem' : '7.5rem',
+                        height: 'auto',
                         objectFit: 'contain',
                       }}
                     />
-                  </div>
+                  </motion.div>
+
+                  {/* ✅ Title Text */}
                   <span style={{ color: 'rgb(6, 182, 212)', fontWeight: 900 }}>Explore Geotrack</span>{' '}
                   <span style={{ color: '#0F172A' }}>with Detailed Step-by-Step Tutorials</span>
                 </motion.h1>
+
+                {/* ✅ Animated Description */}
                 <motion.p
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.7, delay: 0.2 }}
                   style={{
                     fontFamily: '"Inter", sans-serif',
                     fontSize: isMobile ? '14px' : '16px',
@@ -494,13 +503,9 @@ export default function TutorialPage() {
                   Learn how to streamline operations, boost productivity, and scale faster with comprehensive tutorials
                   covering setup, configuration, and advanced features.
                 </motion.p>
-                {/* Feature List */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                  style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}
-                >
+
+                {/* ✅ Feature List - Staggered Animation */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                   {[
                     'Quick start guides for instant setup',
                     'Advanced feature walkthroughs',
@@ -508,9 +513,9 @@ export default function TutorialPage() {
                   ].map((feature, idx) => (
                     <motion.div
                       key={feature}
-                      initial={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, x: -40 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.4, delay: 0.5 + idx * 0.1 }}
+                      transition={{ duration: 0.7, delay: 0.3 + idx * 0.1 }}
                       style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}
                     >
                       <div
@@ -547,8 +552,9 @@ export default function TutorialPage() {
                       </span>
                     </motion.div>
                   ))}
-                </motion.div>
+                </div>
               </div>
+
 
               {/* RIGHT: Enhanced Video Card */}
               <motion.div
