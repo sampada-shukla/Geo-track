@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   UserPlus,
   Settings,
@@ -17,9 +17,15 @@ import {
   UserCircle,
   Route,
   Activity,
+  ChevronDown,
+  ChevronUp,
+  ArrowUp,
+  ArrowDown,
+  Sparkles,
+  Zap,
+  Eye,
 } from 'lucide-react';
-import { motion } from 'motion/react';
-
+import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 
 import logoImage from "../assets/geotrack.png";
 
@@ -28,7 +34,7 @@ import login from "./assets1/login.png";
 import access from "./assets1/access.png";
 import allow from "./assets1/allow.png";
 import map_screen from "./assets1/map_screen.png";
-import start_meeting from "./assets1/start_meeting.png"; 
+import start_meeting from "./assets1/start_meeting.png";
 import meeting_notes from "./assets1/meeting_notes.png";
 import end_meeting from "./assets1/end_meeting.png";
 import client_details from "./assets1/client_details.png";
@@ -47,9 +53,8 @@ import multi_leg_trip_2 from "./assets1/multi_leg_trip_2.png";
 import multi_leg_trip_3 from "./assets1/multi_leg_trip_3.png";
 import meeting_details from "./assets1/meeting_details.png";
 
-
 import { TutorialVideo } from './TutorialVideo';
-import { Footer} from './Footer';
+import { Footer } from './Footer';
 
 const tutorialSections = [
   {
@@ -87,7 +92,6 @@ const tutorialSections = [
         icon: Shield,
         iconColor: 'rgb(29, 78, 216)',
         image: login,
-        
       },
       {
         number: 3,
@@ -110,7 +114,7 @@ const tutorialSections = [
     sectionDescription: 'Allow necessary permissions for seamless app functionality',
     steps: [
       {
-        number: 5,
+        number: 4,
         title: 'Allow Required Services',
         description: 'To ensure smooth functioning, allow the following permissions:',
         details: [
@@ -132,11 +136,11 @@ const tutorialSections = [
   },
   {
     sectionId: 3,
-    sectionTitle: '3.Map Screen & Client Tracking',
+    sectionTitle: '3. Map Screen & Client Tracking',
     sectionDescription: 'View your location and track nearby clients on the map',
     steps: [
       {
-        number: 6,
+        number: 5,
         title: 'View Your Location & Nearby Clients',
         description: 'The map displays your current location. Nearby clients are shown using colored markers.',
         details: [
@@ -148,7 +152,7 @@ const tutorialSections = [
         image: map_screen,
       },
       {
-        number: 7,
+        number: 6,
         title: 'Click on Client Marker',
         description: 'On tapping a client marker, you can view client details and start a meeting with the client.',
         icon: Navigation,
@@ -163,7 +167,7 @@ const tutorialSections = [
     sectionDescription: 'Start, manage, and complete client meetings efficiently',
     steps: [
       {
-        number: 8,
+        number: 7,
         title: 'Start Meeting',
         description: 'When Start Meeting is selected, view client location, phone number, meeting start time & duration.',
         details: [
@@ -176,7 +180,7 @@ const tutorialSections = [
         image: meeting_details,
       },
       {
-        number: 9,
+        number: 8,
         title: 'During the Meeting',
         description: 'Add meeting notes, attach documents, images, or files, and update meeting outcomes in real time.',
         icon: FileText,
@@ -184,7 +188,7 @@ const tutorialSections = [
         image: meeting_notes,
       },
       {
-        number: 10,
+        number: 9,
         title: 'End Meeting',
         description: 'Tap End Meeting. Client status automatically updates from Active → Inactive/Completed. Notes and attachments are securely saved.',
         icon: CheckCircle2,
@@ -199,7 +203,7 @@ const tutorialSections = [
     sectionDescription: 'Access complete client information and history',
     steps: [
       {
-        number: 11,
+        number: 10,
         title: 'View Client Details',
         description: 'From the client screen or map, view client status, last visited date & history, contact information (Email, Address, Coordinates), meeting notes & attachments, and client location highlighted on the map.',
         icon: UserCircle,
@@ -214,15 +218,15 @@ const tutorialSections = [
     sectionDescription: 'Track your trips and manage expenses efficiently',
     steps: [
       {
-        number: 12,
+        number: 11,
         title: 'Choose Trip Type',
         description: 'Select between Single Trip (one-way journey, single transport mode) or Multi-Leg Trip (multiple journeys, different transport modes in one trip).',
         icon: Route,
         iconColor: 'rgb(34, 197, 94)',
         image: trip_details
       },
-     {
-        number: 13,
+      {
+        number: 12,
         title: 'Single Trip Entry',
         description: 'Fill in start location, end location, date & time, distance, transport mode (Bus/Train/Bike/Rickshaw), expense details, and upload receipts.',
         details: [
@@ -239,7 +243,7 @@ const tutorialSections = [
         images: [single_leg_1, single_leg_2, single_leg_3],
       },
       {
-        number: 14,
+        number: 13,
         title: 'Multi-Leg Trip Entry',
         description: 'Enter trip name, multiple journey legs with start/end location, distance, transport mode, amount spent, notes, and attach receipts. View total legs, distance, and expense amount.',
         icon: CreditCard,
@@ -250,12 +254,12 @@ const tutorialSections = [
     ],
   },
   {
-    sectionId: 7, 
+    sectionId: 7,
     sectionTitle: '7. Client Marker Status on Map',
     sectionDescription: 'Client markers on map indicate visit status and priority.',
     steps: [
       {
-        number: 15,
+        number: 14,
         title: 'Client Marker Status on Map',
         description: 'Client markers on map indicate visit status and priority.',
         details: [
@@ -276,7 +280,7 @@ const tutorialSections = [
     sectionDescription: 'Manage and organize all your clients in one place',
     steps: [
       {
-        number: 16,
+        number: 15,
         title: 'View All Clients',
         description: 'Clients are categorized as All, Active, Inactive, and Completed. Search by name, sort by distance, and filter by status.',
         details: [
@@ -290,7 +294,7 @@ const tutorialSections = [
         image: client_screen,
       },
       {
-        number: 17,
+        number: 16,
         title: 'Add New Client',
         description: 'Tap Add Client and choose Quick Fill (scan business card to auto-populate) or Manual Entry (client name, phone, email, address, pincode, notes).',
         icon: UserPlus,
@@ -305,7 +309,7 @@ const tutorialSections = [
     sectionDescription: 'Track all your activities and movements',
     steps: [
       {
-        number: 18,
+        number: 17,
         title: 'View Activity Logs',
         description: 'Displays total number of activities, date & time, latitude & longitude, location coordinates, and distance traveled.',
         icon: Activity,
@@ -320,7 +324,7 @@ const tutorialSections = [
     sectionDescription: 'Manage your account preferences and information',
     steps: [
       {
-        number: 19,
+        number: 18,
         title: 'Profile Information',
         description: 'View & edit profile name, User/Employee ID, and view total expenses incurred.',
         icon: UserCircle,
@@ -328,7 +332,7 @@ const tutorialSections = [
         image: profile_screen,
       },
       {
-        number: 20,
+        number: 19,
         title: 'Account Settings',
         description: 'Enable/disable background location tracking, view registered email and member since date. Tap Sign Out to exit the app securely.',
         icon: Settings,
@@ -339,12 +343,881 @@ const tutorialSections = [
   },
 ];
 
+// Floating Navigation Buttons Component
+const FloatingNavButtons = ({ onScrollToTop, onScrollToBottom, showTop, showBottom }) => {
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        right: '2rem',
+        bottom: '2rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        zIndex: 1000,
+      }}
+    >
+      <AnimatePresence>
+        {showTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onScrollToTop}
+            style={{
+              width: '60px',
+              height: '60px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, rgb(59, 130, 246), rgb(29, 78, 216))',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 8px 24px rgba(59, 130, 246, 0.4), 0 0 0 4px rgba(59, 130, 246, 0.1)',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent)',
+                animation: 'shimmer 2s infinite',
+              }}
+            />
+            <ArrowUp color="white" size={28} strokeWidth={2.5} />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showBottom && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -20 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onScrollToBottom}
+            style={{
+              width: '60px',
+              height: '60px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, rgb(6, 182, 212), rgb(13, 148, 136))',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 8px 24px rgba(6, 182, 212, 0.4), 0 0 0 4px rgba(6, 182, 212, 0.1)',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent)',
+                animation: 'shimmer 2s infinite',
+              }}
+            />
+            <ArrowDown color="white" size={28} strokeWidth={2.5} />
+          </motion.button>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+// Enhanced Step Component with Premium Design
+const ScrollingStoryStep = ({ step, isMobile, isTablet, activeImageIndex, stepIndex, totalSteps }) => {
+  const imageRef = useRef(null);
+  const popRef = useRef(null);
+  const stepRef = useRef(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const { scrollYProgress } = useScroll({
+    target: stepRef,
+    offset: ["start end", "end start"]
+  });
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+
+    if (stepRef.current) {
+      observer.observe(stepRef.current);
+    }
+
+    return () => {
+      if (stepRef.current) {
+        observer.unobserve(stepRef.current);
+      }
+    };
+  }, []);
+     // Mobile popup handling with scroll threshold
+useEffect(() => {
+  if (!isMobile) return;
+
+  let lastScrollY = window.scrollY;
+  const scrollThreshold = 50; // pixels scrolled before closing
+
+  const handleClickOutside = (event) => {
+    if (
+      showPopup &&
+      imageRef.current &&
+      popRef.current &&
+      !imageRef.current.contains(event.target) &&
+      !popRef.current.contains(event.target)
+    ) {
+      setShowPopup(false);
+    }
+  };
+
+  const handleScroll = () => {
+    if (showPopup) {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+      
+      if (scrollDelta > scrollThreshold) {
+        setShowPopup(false);
+      }
+    }
+  };
+
+  if (showPopup) {
+    lastScrollY = window.scrollY; // Set initial scroll position when popup opens
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    window.addEventListener('scroll', handleScroll, true);
+  }
+
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+    document.removeEventListener('touchstart', handleClickOutside);
+    window.removeEventListener('scroll', handleScroll, true);
+  };
+}, [showPopup, isMobile]);
+  const imageOnLeft = step.number % 2 === 1;
+
+  const imageX = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.7, 1],
+    imageOnLeft ? [-80, 0, 0, -80] : [80, 0, 0, 80]
+  );
+  const imageOpacity = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [0, 1, 1, 1, 0]);
+  const imageScale = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.92, 1, 1, 0.92]);
+
+  const textX = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.7, 1],
+    imageOnLeft ? [80, 0, 0, 80] : [-80, 0, 0, -80]
+  );
+  const textOpacity = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [0, 1, 1, 1, 0]);
+
+  const Icon = step.icon;
+  const images = step.multiImages ? step.images : [step.image];
+
+  // Progress indicator
+  const progressPercentage = ((stepIndex + 1) / totalSteps) * 100;
+
+  return (
+    <div
+      ref={stepRef}
+      style={{
+        minHeight: isMobile ? '85vh' : '75vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: isMobile ? '2rem 1rem' : '3rem 2rem',
+        position: 'relative',
+        width: '100%',
+      }}
+    >
+      {/* Animated background gradient */}
+      <motion.div
+        animate={isInView ? {
+          background: [
+            `radial-gradient(circle at ${imageOnLeft ? '20%' : '80%'} 50%, ${step.iconColor}08, transparent 60%)`,
+            `radial-gradient(circle at ${imageOnLeft ? '30%' : '70%'} 60%, ${step.iconColor}12, transparent 70%)`,
+            `radial-gradient(circle at ${imageOnLeft ? '20%' : '80%'} 50%, ${step.iconColor}08, transparent 60%)`,
+          ]
+        } : {}}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          overflow: 'hidden',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+
+      {/* Progress indicator line */}
+      <div
+        style={{
+          position: 'absolute',
+          left: isMobile ? '1rem' : '3rem',
+          top: 0,
+          bottom: 0,
+          width: '2px',
+          background: 'linear-gradient(to bottom, transparent, rgba(203, 213, 225, 0.3), transparent)',
+          zIndex: 0,
+        }}
+      >
+        <motion.div
+          initial={{ scaleY: 0 }}
+          animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          style={{
+            width: '100%',
+            height: '100%',
+            background: `linear-gradient(to bottom, ${step.iconColor}, ${step.iconColor}80)`,
+            transformOrigin: 'top',
+          }}
+        />
+      </div>
+
+      <div
+        style={{
+          maxWidth: '1300px',
+          width: '100%',
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: isMobile ? '2rem' : '4rem',
+          alignItems: 'center',
+          position: 'relative',
+          zIndex: 1,
+          margin: '0 auto',
+          padding: '0 1rem',
+        }}
+      >
+        {/* Image Side */}
+        <motion.div
+          style={{
+            x: isMobile ? 0 : imageX,
+            scale: imageScale,
+            opacity: imageOpacity,
+            order: isMobile ? 1 : imageOnLeft ? 1 : 2,
+            position: 'relative',
+            background: `linear-gradient(135deg, ${step.iconColor}05, ${step.iconColor}02)`,
+            borderRadius: '32px',
+            padding: isMobile ? '2rem 1.5rem' : '3rem 2rem',
+          }}
+        >
+          {/* Animated floating particles */}
+          {[...Array(5)].map((_, i) => (
+            <motion.div
+              key={i}
+              animate={{
+                y: [0, -30, 0],
+                x: [0, Math.sin(i) * 20, 0],
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{
+                duration: 3 + i * 0.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.3,
+              }}
+              style={{
+                position: 'absolute',
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                background: step.iconColor,
+                top: `${20 + i * 15}%`,
+                left: imageOnLeft ? `${10 + i * 5}%` : `${80 - i * 5}%`,
+                filter: 'blur(1px)',
+                zIndex: 0,
+                boxShadow: `0 0 20px ${step.iconColor}`,
+              }}
+            />
+          ))}
+
+          {/* Rotating gradient ring */}
+          <motion.div
+            animate={isInView ? {
+              rotate: [0, 360],
+              scale: [1, 1.1, 1],
+            } : {}}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            style={{
+              position: 'absolute',
+              top: '-40px',
+              right: '-40px',
+              width: '120px',
+              height: '120px',
+              borderRadius: '50%',
+              background: `conic-gradient(from 0deg, ${step.iconColor}20, transparent, ${step.iconColor}20)`,
+              filter: 'blur(30px)',
+              zIndex: -1,
+            }}
+          />
+
+          {/* Pulsing glow effect */}
+          <motion.div
+            animate={isInView ? {
+              scale: [1, 1.2, 1],
+              opacity: [0.2, 0.4, 0.2],
+            } : {}}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '90%',
+              height: '90%',
+              borderRadius: '30px',
+              background: `radial-gradient(circle, ${step.iconColor}15, transparent 70%)`,
+              filter: 'blur(40px)',
+              zIndex: -1,
+            }}
+          />
+
+          <motion.div
+            whileHover={{ scale: 1.02, rotate: imageOnLeft ? -2 : 2 }}
+            transition={{ duration: 0.3 }}
+            style={{ 
+              position: 'relative',
+              minHeight: isMobile ? '400px' : '550px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {/* Light background card behind mockup */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: -15,
+                borderRadius: '28px',
+                background: `linear-gradient(135deg, ${step.iconColor}08, ${step.iconColor}05)`,
+                zIndex: -1,
+              }}
+            />
+
+            <AnimatePresence mode="wait">
+              <motion.img
+              ref={imageRef}
+              key={activeImageIndex[step.number] ?? 0}
+              src={images[activeImageIndex[step.number] ?? 0]}
+              alt={step.title}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              whileHover={{ 
+                scale: 1.03,
+                rotateY: 5,
+                rotateX: 5,
+              }}
+              onMouseEnter={() => !isMobile && setShowPopup(true)}
+              onMouseLeave={() => !isMobile && setShowPopup(false)}
+              onClick={() => {
+                if (isMobile) {
+                  setShowPopup(!showPopup);
+                }
+              }}
+              style={{
+                width: '100%',
+                maxWidth: isMobile ? '420px' : isTablet ? '500px' : '550px',
+                height: 'auto',
+                margin: '0 auto',
+                display: 'block',
+                filter: 'drop-shadow(0 20px 50px rgba(0,0,0,0.18))',
+                borderRadius: '20px',
+                cursor: 'pointer',
+                border: `3px solid ${step.iconColor}40`,
+                transformStyle: 'preserve-3d',
+                aspectRatio: 'auto',
+                objectFit: 'contain',
+              }}
+            />
+            </AnimatePresence>
+
+            {/* Image overlay effect on hover with animated icon */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileHover={{ opacity: 1 }}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: `linear-gradient(135deg, ${step.iconColor}20, ${step.iconColor}10)`,
+                borderRadius: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                pointerEvents: 'none',
+                backdropFilter: 'blur(2px)',
+              }}
+            >
+              <motion.div
+                animate={{
+                  scale: [1, 1.2, 1],
+                  rotate: [0, 10, -10, 0],
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Eye color="white" size={48} strokeWidth={2.5} 
+                  style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} 
+                />
+              </motion.div>
+            </motion.div>
+
+            {/* Corner accent decorations */}
+            <motion.div
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.5, 0.8, 0.5],
+              }}
+              transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+              style={{
+                position: 'absolute',
+                top: -10,
+                left: -10,
+                width: '40px',
+                height: '40px',
+                border: `3px solid ${step.iconColor}`,
+                borderRight: 'none',
+                borderBottom: 'none',
+                borderRadius: '20px 0 0 0',
+              }}
+            />
+            <motion.div
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.5, 0.8, 0.5],
+              }}
+              transition={{ duration: 2, repeat: Infinity, delay: 0.7 }}
+              style={{
+                position: 'absolute',
+                bottom: -10,
+                right: -10,
+                width: '40px',
+                height: '40px',
+                border: `3px solid ${step.iconColor}`,
+                borderLeft: 'none',
+                borderTop: 'none',
+                borderRadius: '0 0 20px 0',
+              }}
+            />
+          </motion.div>
+
+          {/* Enhanced Popup */}
+          <AnimatePresence>
+            {showPopup && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 25 }}
+                style={{
+                  position: 'absolute',
+                  bottom: '-20px',
+                  left: imageOnLeft ? '0' : 'auto',
+                  right: imageOnLeft ? 'auto' : '0',
+                  width: isMobile ? 'calc(100% - 20px)' : '320px',
+                  maxWidth: isMobile ? '340px' : '320px',
+                  background: 'linear-gradient(135deg, rgb(15, 23, 42), rgb(30, 41, 59))',
+                  borderRadius: '1.5rem',
+                  padding: isMobile ? '1.5rem' : '1.75rem',
+                  boxShadow: '0 25px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1), 0 0 30px rgba(59, 130, 246, 0.3)',
+                  color: 'white',
+                  zIndex: 1000,
+                  pointerEvents: isMobile ? 'auto' : 'none',
+                  backdropFilter: 'blur(20px)',
+                  border: `1px solid ${step.iconColor}40`,
+                }}
+              >
+                {/* Sparkle effect */}
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.5, 1, 0.5],
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                  }}
+                >
+                  <Sparkles color={step.iconColor} size={20} />
+                </motion.div>
+
+                {/* Step badge - Enhanced with vibrant color */}
+                <motion.div
+                  whileHover={{ scale: 1.15, rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                  style={{
+                    position: 'absolute',
+                    top: '-20px',
+                    left: '-20px',
+                    width: isMobile ? '50px' : '60px',
+                    height: isMobile ? '50px' : '60px',
+                    borderRadius: '50%',
+                    background: `linear-gradient(135deg, ${step.iconColor}, ${step.iconColor}ee)`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: isMobile ? '1.15rem' : '1.4rem',
+                    fontWeight: 900,
+                    color: 'white',
+                    boxShadow: `0 12px 40px ${step.iconColor}dd, 0 0 30px ${step.iconColor}99, 0 4px 15px rgba(0,0,0,0.4)`,
+                    border: '4px solid white',
+                    zIndex: 100,
+                  }}
+                >
+                  <div style={{
+                    position: 'absolute',
+                    inset: -3,
+                    borderRadius: '50%',
+                    background: `linear-gradient(135deg, ${step.iconColor}, ${step.iconColor}aa)`,
+                    filter: 'blur(8px)',
+                    opacity: 0.7,
+                    zIndex: -1,
+                  }} />
+                  {step.number}
+                </motion.div>
+
+                <div
+                  ref={popRef}
+                  style={{
+                    width: isMobile ? '3rem' : '3.5rem',
+                    height: isMobile ? '3rem' : '3.5rem',
+                    borderRadius: '1rem',
+                    background: `linear-gradient(135deg, ${step.iconColor}, ${step.iconColor}dd)`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1rem',
+                    boxShadow: `0 8px 20px ${step.iconColor}40`,
+                  }}
+                >
+                  <Icon color="white" size={isMobile ? 20 : 24} strokeWidth={2.5} />
+                </div>
+
+                <h4
+                  style={{
+                    fontSize: isMobile ? '1.1rem' : '1.25rem',
+                    fontWeight: 700,
+                    marginBottom: '0.6rem',
+                    fontFamily: '"Poppins", sans-serif',
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {step.title}
+                </h4>
+
+                <p
+                  style={{
+                    fontSize: isMobile ? '0.9rem' : '0.95rem',
+                    color: 'rgba(255,255,255,0.9)',
+                    lineHeight: 1.6,
+                    fontFamily: '"Inter", sans-serif',
+                  }}
+                >
+                  {step.description}
+                </p>
+
+                {step.details && (
+                  <ul
+                    style={{
+                      marginTop: '1rem',
+                      paddingLeft: '0',
+                      listStyle: 'none',
+                    }}
+                  >
+                    {step.details.map((d, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        style={{
+                          fontSize: isMobile ? '0.8rem' : '0.85rem',
+                          color: 'rgba(255,255,255,0.8)',
+                          marginBottom: '0.5rem',
+                          fontFamily: '"Inter", sans-serif',
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '0.5rem',
+                        }}
+                      >
+                        <Zap size={14} color={step.iconColor} style={{ marginTop: '2px', flexShrink: 0 }} />
+                        <span>{d}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Text Side - Enhanced */}
+        <motion.div
+          style={{
+            x: isMobile ? 0 : textX,
+            opacity: textOpacity,
+            order: isMobile ? 2 : imageOnLeft ? 2 : 1,
+            position: 'relative',
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.9))',
+              padding: isMobile ? '2rem' : '2.5rem',
+              borderRadius: '24px',
+              border: `3px solid ${step.iconColor}30`,
+              boxShadow: `0 12px 40px ${step.iconColor}20, 0 4px 12px rgba(0,0,0,0.08)`,
+              backdropFilter: 'blur(10px)',
+              position: 'relative',
+              width: '100%',
+            }}
+          >
+            {/* Animated corner decoration */}
+            <motion.div
+              animate={{
+                rotate: [0, 90, 180, 270, 360],
+              }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              style={{
+                position: 'absolute',
+                top: '-50px',
+                right: '-50px',
+                width: '150px',
+                height: '150px',
+                background: `conic-gradient(from 0deg, ${step.iconColor}15, transparent, ${step.iconColor}15)`,
+                borderRadius: '50%',
+                filter: 'blur(40px)',
+              }}
+            />
+
+            {/* Header with icon and step number */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '1.25rem',
+                position: 'relative',
+                
+                zIndex: 1,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <motion.div
+                  whileHover={{ scale: 1.12, rotate: 360 }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                  style={{
+                    width: isMobile ? '56px' : '64px',
+                    height: isMobile ? '56px' : '64px',
+                    borderRadius: '16px',
+                    background: `linear-gradient(135deg, ${step.iconColor}, ${step.iconColor}dd)`,
+                    backgroundColor: step.iconColor,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: `0 12px 28px ${step.iconColor}40, 0 0 20px ${step.iconColor}20`,
+                    position: 'relative',
+                    overflow: 'visible',
+                  }}
+                >
+                  <Icon 
+                    color="white" 
+                    size={isMobile ? 28 : 32} 
+                    strokeWidth={2.5}
+                    style={{ 
+                      position: 'relative', 
+                      zIndex: 3,
+                      filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+                    }}
+                  />
+                  
+                  {/* Pulse effect */}
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.3, 1],
+                      opacity: [0.5, 0, 0.5],
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    style={{
+                      position: 'absolute',
+                      inset: -4,
+                      borderRadius: '16px',
+                      border: `2px solid ${step.iconColor}`,
+                      zIndex: 1,
+                    }}
+                  />
+                </motion.div>
+
+                <div>
+                  <div
+                    style={{
+                      fontSize: isMobile ? '0.75rem' : '0.8rem',
+                      fontWeight: 700,
+                      color: step.iconColor,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em',
+                      marginBottom: '0.25rem',
+                    }}
+                  >
+                    Step {step.number} of {totalSteps}
+                  </div>
+                  <div
+                    style={{
+                      width: '60px',
+                      height: '3px',
+                      background: `linear-gradient(to right, ${step.iconColor}, transparent)`,
+                      borderRadius: '2px',
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Large step number */}
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                style={{
+                  width: isMobile ? '52px' : '64px',
+                  height: isMobile ? '52px' : '64px',
+                  borderRadius: '14px',
+                  background: `linear-gradient(135deg, ${step.iconColor}20, ${step.iconColor}10)`,
+                  border: `3px solid ${step.iconColor}50`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: '"Poppins", sans-serif',
+                  fontSize: isMobile ? '22px' : '28px',
+                  fontWeight: 800,
+                  color: step.iconColor,
+                  boxShadow: `0 6px 16px ${step.iconColor}25`,
+                }}
+              >
+                {step.number}
+              </motion.div>
+            </div>
+
+            {/* Title */}
+            <h4
+              style={{
+                fontFamily: '"Poppins", sans-serif',
+                fontSize: isMobile ? '22px' : isTablet ? '26px' : '30px',
+                fontWeight: 700,
+                color: 'rgb(15, 23, 42)',
+                lineHeight: 1.3,
+                marginBottom: '1rem',
+                position: 'relative',
+                zIndex: 1,
+              }}
+            >
+              {step.title}
+            </h4>
+
+            {/* Description */}
+            <p
+              style={{
+                fontFamily: '"Inter", sans-serif',
+                fontSize: isMobile ? '15px' : '16px',
+                color: 'rgb(71, 85, 105)',
+                lineHeight: 1.7,
+                marginBottom: step.details ? '1.25rem' : '0',
+                position: 'relative',
+                zIndex: 1,
+              }}
+            >
+              {step.description}
+            </p>
+
+            {/* Details */}
+            {step.details && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.75rem',
+                  position: 'relative',
+                  zIndex: 1,
+                }}
+              >
+                {step.details.map((detail, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                    transition={{ delay: 0.1 * i, duration: 0.4 }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '0.75rem',
+                      padding: '0.75rem 1rem',
+                      background: `linear-gradient(90deg, ${step.iconColor}08, transparent)`,
+                      borderRadius: '12px',
+                      borderLeft: `4px solid ${step.iconColor}`,
+                      boxShadow: `0 2px 8px ${step.iconColor}10`,
+                    }}
+                  >
+                    <CheckCircle
+                      size={18}
+                      color={step.iconColor}
+                      style={{ marginTop: '2px', flexShrink: 0 }}
+                    />
+                    <span
+                      style={{
+                        fontSize: isMobile ? '14px' : '15px',
+                        color: 'rgb(100, 116, 139)',
+                        lineHeight: 1.6,
+                        fontFamily: '"Inter", sans-serif',
+                      }}
+                    >
+                      {detail}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+
+            {/* Progress bar */}
+            <motion.div
+              initial={{ width: 0 }}
+              animate={isInView ? { width: '100px' } : { width: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              style={{
+                height: '5px',
+                background: `linear-gradient(to right, ${step.iconColor}, ${step.iconColor}80)`,
+                marginTop: '1.5rem',
+                borderRadius: '3px',
+                boxShadow: `0 3px 10px ${step.iconColor}40`,
+              }}
+            />
+          </motion.div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
 export default function TutorialPage() {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [activeCard, setActiveCard] = useState<number | null>(null);
-  const [activeImageIndex, setActiveImageIndex] = useState<{ [key: number]: number }>({});
+  const [activeImageIndex, setActiveImageIndex] = useState({});
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
+  const [showTopButton, setShowTopButton] = useState(false);
+  const [showBottomButton, setShowBottomButton] = useState(true);
 
   useEffect(() => {
     const link = document.createElement('link');
@@ -353,8 +1226,34 @@ export default function TutorialPage() {
     link.rel = 'stylesheet';
     document.head.appendChild(link);
 
+    // Add shimmer animation
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      
+      * {
+        box-sizing: border-box;
+      }
+      
+      html, body {
+        overflow-x: hidden;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        overflow-y: auto;
+      }
+    `;
+    document.head.appendChild(style);
+
     return () => {
       document.head.removeChild(link);
+      document.head.removeChild(style);
     };
   }, []);
 
@@ -367,6 +1266,20 @@ export default function TutorialPage() {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
+
+      setShowTopButton(scrollTop > 300);
+      setShowBottomButton(scrollTop < scrollHeight - clientHeight - 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -384,15 +1297,20 @@ export default function TutorialPage() {
         return updated;
       });
     }, 3000);
+    
 
     return () => clearInterval(interval);
   }, []);
 
-  const handleCardInteraction = (stepNumber: number) => {
-    if (isMobile) {
-      setActiveCard(activeCard === stepNumber ? null : stepNumber);
-    }
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const scrollToBottom = () => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+  };
+
+  const totalSteps = tutorialSections.reduce((acc, section) => acc + section.steps.length, 0);
 
   return (
     <div
@@ -401,8 +1319,19 @@ export default function TutorialPage() {
         background: 'linear-gradient(180deg, #e0f7fa 0%, #ffffff 40%, #ffffff 100%)',
         position: 'relative',
         fontFamily: '"Inter", sans-serif',
+        width: '100%',
       }}
     >
+      {/* Floating Navigation Buttons */}
+      {!isMobile && (
+        <FloatingNavButtons
+          onScrollToTop={scrollToTop}
+          onScrollToBottom={scrollToBottom}
+          showTop={showTopButton}
+          showBottom={showBottomButton}
+        />
+      )}
+
       {/* Background */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
         <div
@@ -415,7 +1344,7 @@ export default function TutorialPage() {
         />
       </div>
 
-      <div style={{ position: 'relative', zIndex: 10 }}>
+      <div style={{ position: 'relative', zIndex: 10, width: '100%' }}>
         {/* Hero Section */}
         <section
           style={{
@@ -436,15 +1365,59 @@ export default function TutorialPage() {
           >
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr' : '1.1fr 0.9fr',
-                gap: isMobile ? '2rem' : isTablet ? '2.5rem' : '3rem',
-                alignItems: 'center',
+                display: isMobile ? 'flex' : 'grid',
+                flexDirection: isMobile ? 'column' : undefined,
+                gridTemplateColumns: isMobile ? undefined : isTablet ? '1fr' : '1.1fr 0.9fr',
+                gap: isMobile ? '0rem' : isTablet ? '2.5rem' : '3rem',
+                alignItems: 'start',
               }}
             >
-              {/* LEFT: Text Content */}
-              <div style={{ maxWidth: isMobile ? '100%' : '650px' }}>
-                {/* ✅ Animated H1 with Logo */}
+              {/* Logo - appears first on mobile */}
+              {isMobile && (
+                <motion.div
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.7, delay: 0.05 }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'centre',
+                    justifyContent: 'flex-start',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  <img
+                    src={logoImage}
+                    alt="Geotrack Logo"
+                    style={{
+                      width: '14rem',
+                      height: 'auto',
+                      objectFit: 'contain',
+                    }}
+                  />
+                </motion.div>
+              )}
+
+              {/* Video - appears second on mobile */}
+              {isMobile && (
+                <motion.div
+                  style={{ 
+                    width: '100%', 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    marginTop: '1.25rem',
+                  }}
+                >
+                  <TutorialVideo />
+                </motion.div>
+              )}
+
+              {/* Text Content */}
+              <div
+                style={{
+                  maxWidth: isMobile ? '100%' : '650px',
+                  marginTop: isMobile ? '0' : '-2.5rem',
+                }}
+              >
                 <motion.h1
                   initial={{ opacity: 0, x: -40 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -453,40 +1426,41 @@ export default function TutorialPage() {
                     fontFamily: '"Poppins", sans-serif',
                     fontSize: isMobile ? '28px' : isTablet ? '36px' : '48px',
                     fontWeight: 700,
+                    marginTop:'1rem',
                     marginBottom: '1rem',
                     lineHeight: isMobile ? '38px' : isTablet ? '46px' : '58px',
                     letterSpacing: '-0.025em',
                   }}
                 >
-                  {/* ✅ Logo Animation */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.7, delay: 0.05 }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '1rem',
-                      marginBottom: isMobile ? '1rem' : '1.5rem',
-                    }}
-                  >
-                    <img
-                      src={logoImage}
-                      alt="Geotrack Logo"
+                  {!isMobile && (
+                    <motion.div
+                      initial={{ opacity: 0, x: -40 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.7, delay: 0.05 }}
                       style={{
-                        width: isMobile ? '5rem' : isTablet ? '6rem' : '7.5rem',
-                        height: 'auto',
-                        objectFit: 'contain',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start',
+                        marginLeft: '-4rem',
+                        marginBottom: '-1.5rem',
                       }}
-                    />
-                  </motion.div>
+                    >
+                      <img
+                        src={logoImage}
+                        alt="Geotrack Logo"
+                        style={{
+                          width: isTablet ? '16rem' : '20rem',
+                          height: 'auto',
+                          objectFit: 'contain',
+                        }}
+                      />
+                    </motion.div>
+                  )}
 
-                  {/* ✅ Title Text */}
                   <span style={{ color: 'rgb(6, 182, 212)', fontWeight: 900 }}>Explore Geotrack</span>{' '}
                   <span style={{ color: '#0F172A' }}>with Detailed Step-by-Step Tutorials</span>
                 </motion.h1>
 
-                {/* ✅ Animated Description */}
                 <motion.p
                   initial={{ opacity: 0, x: -40 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -496,6 +1470,7 @@ export default function TutorialPage() {
                     fontSize: isMobile ? '14px' : '16px',
                     fontWeight: 400,
                     color: '#475569',
+                    marginTop: '-0.75rem',
                     marginBottom: '1.5rem',
                     lineHeight: isMobile ? '22px' : '26px',
                   }}
@@ -504,7 +1479,6 @@ export default function TutorialPage() {
                   covering setup, configuration, and advanced features.
                 </motion.p>
 
-                {/* ✅ Feature List - Staggered Animation */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                   {[
                     'Quick start guides for instant setup',
@@ -555,23 +1529,25 @@ export default function TutorialPage() {
                 </div>
               </div>
 
-
-              {/* RIGHT: Enhanced Video Card */}
-              <motion.div
-                style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
-                animate={isMobile ? {} : { y: [0, -12, 0] }}
-                transition={
-                  isMobile
-                    ? {}
-                    : {
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }
-                }
-              >
-                <TutorialVideo />
-              </motion.div>
+              {/* Video for desktop/tablet */}
+              {!isMobile && (
+                <motion.div
+                  style={{ 
+                    width: '100%', 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    marginTop: '4rem',
+                  }}
+                  animate={{ y: [0, -12, 0] }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                >
+                  <TutorialVideo />
+                </motion.div>
+              )}
             </div>
           </div>
         </section>
@@ -579,7 +1555,7 @@ export default function TutorialPage() {
         {/* Tutorial Section Header */}
         <section
           style={{
-            padding: isMobile ? '1.5rem 1rem 1rem' : '2rem 1.5rem 1.5rem',
+            padding: isMobile ? '2.5rem 1rem 1.5rem' : '3rem 1.5rem 2rem',
             background: 'linear-gradient(to bottom, rgba(255,255,255,0), #f8fafc)',
           }}
         >
@@ -591,243 +1567,144 @@ export default function TutorialPage() {
               padding: isMobile ? '0 0.5rem' : '0 1.5rem',
             }}
           >
-            <h2
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
               style={{
                 fontFamily: '"Poppins", sans-serif',
-                fontSize: isMobile ? '24px' : isTablet ? '30px' : '36px',
+                fontSize: isMobile ? '28px' : isTablet ? '34px' : '40px',
                 fontWeight: 700,
                 color: 'rgb(20, 47, 83)',
-                marginBottom: '0.65rem',
-                lineHeight: isMobile ? '32px' : isTablet ? '38px' : '46px',
+                marginBottom: '0.75rem',
+                lineHeight: isMobile ? '36px' : isTablet ? '42px' : '48px',
               }}
             >
               Complete Step-by-Step Guide
-            </h2>
+            </motion.h2>
 
-            <p
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
               style={{
                 fontFamily: '"Inter", sans-serif',
-                fontSize: isMobile ? '14px' : '16px',
+                fontSize: isMobile ? '15px' : '17px',
                 color: '#475569',
                 maxWidth: '720px',
                 margin: '0 auto',
-                lineHeight: isMobile ? '22px' : '26px',
+                lineHeight: isMobile ? '23px' : '26px',
                 fontWeight: 400,
               }}
             >
               Master Geotrack with our comprehensive guide covering every feature from sign-up to advanced functionality
-            </p>
+            </motion.p>
           </div>
         </section>
 
-        <section style={{ padding: isMobile ? '2rem 0.5rem' : isTablet ? '2.5rem 1rem' : '3rem 1rem' }}>
-          <div style={{ maxWidth: '90rem', margin: '0 auto' }}>
-            {tutorialSections.map((section) => (
-              <div key={section.sectionId} style={{ marginBottom: '0.5rem' }}>
-                <h3
+        {/* Scrolling Story Steps */}
+        <section
+          style={{
+            background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%)',
+            position: 'relative',
+          }}
+        >
+          {tutorialSections.map((section, sectionIndex) => {
+            const sectionStepStart = tutorialSections
+              .slice(0, sectionIndex)
+              .reduce((acc, s) => acc + s.steps.length, 0);
+
+            return (
+              <div
+                key={section.sectionId}
+                style={{
+                  position: 'relative',
+                  paddingTop: sectionIndex === 0 ? '2rem' : '4rem',
+                  paddingBottom: '2rem',
+                }}
+              >
+                {/* Section Header */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  viewport={{ once: true }}
                   style={{
-                    fontFamily: '"Poppins", sans-serif',
-                    fontSize: isMobile ? '20px' : isTablet ? '24px' : '28px',
-                    fontWeight: 700,
-                    color: 'rgb(20, 47, 83)',
-                    padding: isMobile ? '0 0.5rem' : '0',
+                    padding: isMobile ? '2rem 1rem 1rem' : '2.5rem 2rem 1.5rem',
+                    textAlign: 'center',
+                    maxWidth: '900px',
+                    margin: '0 auto',
+                    position: 'relative',
                   }}
                 >
-                  {section.sectionTitle}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: '"Inter", sans-serif',
-                    color: '#64748b',
-                    lineHeight: '1.6',
-                    fontSize: isMobile ? '13px' : '15px',
-                    padding: isMobile ? '0 0.5rem' : '0',
-                  }}
-                >
-                  {section.sectionDescription}
-                </p>
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.3, 0.5, 0.3],
+                    }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: isMobile ? '250px' : '400px',
+                      height: isMobile ? '250px' : '400px',
+                      background: `radial-gradient(circle, ${section.steps[0].iconColor}12, transparent 70%)`,
+                      borderRadius: '50%',
+                      filter: 'blur(50px)',
+                      zIndex: 0,
+                    }}
+                  />
 
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'center',
-                    paddingTop: '2rem',
-                    gap: isMobile ? '1.5rem' : isTablet ? '2.5rem' : '3rem',
-                    paddingInline: isMobile ? '0' : isTablet ? '1.5rem' : '2rem',
+                  <h2
+                    style={{
+                      fontFamily: '"Poppins", sans-serif',
+                      fontSize: isMobile ? '24px' : isTablet ? '28px' : '32px',
+                      fontWeight: 700,
+                      color: 'rgb(20, 47, 83)',
+                      marginBottom: '0.5rem',
+                      position: 'relative',
+                      zIndex: 1,
+                      background: 'linear-gradient(135deg, rgb(20, 47, 83), rgb(71, 85, 105))',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                    }}
+                  >
+                    {section.sectionTitle}
+                  </h2>
+                  <p
+                    style={{
+                      fontFamily: '"Inter", sans-serif',
+                      color: '#64748b',
+                      lineHeight: '1.6',
+                      fontSize: isMobile ? '14px' : '16px',
+                      position: 'relative',
+                      zIndex: 1,
+                    }}
+                  >
+                    {section.sectionDescription}
+                  </p>
+                </motion.div>
 
-                  }}
-                >
-                  {section.steps.map((step, stepIndex) => {
-                    const Icon = step.icon;
-                    const isHovered = hoveredCard === step.number;
-                    const isActive = activeCard === step.number;
-                    const showPopup = isMobile ? isActive : isHovered;
-
-                    const images = step.multiImages ? step.images : [step.image];
-
-                    return (
-                      <div
-                        key={step.number}
-                        onMouseEnter={() => !isMobile && setHoveredCard(step.number)}
-                        onMouseLeave={() => !isMobile && setHoveredCard(null)}
-                        onClick={() => handleCardInteraction(step.number)}
-                        style={{
-                          position: 'relative',
-                          width: isMobile ? '95%' : isTablet ? 'calc(50% - 1.5rem)' : '340px',
-                          maxWidth: isMobile ? '400px' : 'none',
-                          perspective: '1200px',
-                          margin: '0 auto',
-                          cursor: isMobile ? 'pointer' : 'default',
-                        }}
-                      >
-                        {/* Staggered Animation Wrapper */}
-<motion.div
-  initial={{ opacity: 0, y: 60 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  transition={{
-    duration: 0.6,
-    ease: 'easeOut',
-  }}
-  viewport={{
-    once: true,
-    amount: 0.25,
-  }}
->
-  <div
-    style={{
-      position: 'relative',
-      overflow: 'visible',
-    }}
-  >
-    <div style={{ transition: 'transform 0.25s ease' }}>
-      <motion.img
-        key={activeImageIndex[step.number] ?? 0}
-        src={images[activeImageIndex[step.number] ?? 0]}
-        alt={step.title}
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -50 }}
-        transition={{ duration: 0.5, ease: 'easeInOut' }}
-        style={{
-          width: '100%',
-          height: isMobile ? 'auto' : isTablet ? '600px' : '480px',
-          objectFit: 'cover',
-          display: 'block',
-        }}
-      />
-    </div>
-
-                          {/* POPUP DESCRIPTION */}
-                          {showPopup && (
-                            <motion.div
-                              initial={{ opacity: 0, x: isMobile ? 0 : 20, y: isMobile ? 20 : 0, scale: 0.95 }}
-                              animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-                              transition={{ duration: 0.25 }}
-                              style={{
-                                position: isMobile ? 'relative' : 'fixed',
-                                top: isMobile ? 'auto' : '45%',
-                                left: isMobile ? 'auto' : '45%',
-                                transform: isMobile ? 'none' : 'translate(-50%, -45%)',
-                                width: isMobile ? '100%' : isTablet ? '300px' : '320px',
-                                background: 'rgba(15, 23, 42, 0.95)',
-                                backdropFilter: 'blur(12px)',
-                                borderRadius: '1.25rem',
-                                padding: isMobile ? '1.25rem' : '1.5rem',
-                                boxShadow: isMobile
-                                  ? '0 10px 30px rgba(0,0,0,0.4)'
-                                  : '0 30px 60px rgba(0,0,0,0.6)',
-                                color: 'white',
-                                zIndex: isMobile ? 10 : 99999,
-                                pointerEvents: isMobile ? 'auto' : 'none',
-                                whiteSpace: 'normal',
-                                wordWrap: 'break-word',
-                                marginTop: isMobile ? '1rem' : '0',
-                              }}
-                            >
-                              {/* STEP NUMBER BADGE */}
-                              <div
-                                style={{
-                                  position: 'absolute',
-                                  top: '-14px',
-                                  left: '-14px',
-                                  width: isMobile ? '36px' : '42px',
-                                  height: isMobile ? '36px' : '42px',
-                                  borderRadius: '50%',
-                                  background: step.iconColor,
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  fontSize: isMobile ? '0.9rem' : '1.05rem',
-                                  fontWeight: 800,
-                                  color: 'white',
-                                  boxShadow: '0 10px 25px rgba(0,0,0,0.4)',
-                                }}
-                              >
-                                {step.number}
-                              </div>
-                              <div
-                                style={{
-                                  width: isMobile ? '2.5rem' : '3rem',
-                                  height: isMobile ? '2.5rem' : '3rem',
-                                  borderRadius: '0.75rem',
-                                  background: step.iconColor,
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  marginBottom: '0.75rem',
-                                }}
-                              >
-                                <Icon color="white" size={isMobile ? 18 : 22} />
-                              </div>
-
-                              <h4
-                                style={{
-                                  fontSize: isMobile ? '1rem' : '1.1rem',
-                                  fontWeight: 700,
-                                  marginBottom: '0.5rem',
-                                }}
-                              >
-                                {step.title}
-                              </h4>
-
-                              <p
-                                style={{
-                                  fontSize: isMobile ? '0.85rem' : '0.9rem',
-                                  color: 'rgba(255,255,255,0.85)',
-                                  lineHeight: 1.6,
-                                }}
-                              >
-                                {step.description}
-                              </p>
-
-                              {step.details && (
-                                <ul style={{ marginTop: '0.75rem', paddingLeft: '1rem' }}>
-                                  {step.details.map((d, i) => (
-                                    <li
-                                      key={i}
-                                      style={{
-                                        fontSize: isMobile ? '0.75rem' : '0.8rem',
-                                        color: 'rgba(255,255,255,0.75)',
-                                        marginBottom: '0.35rem',
-                                      }}
-                                    >
-                                      {d}
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}  
-                            </motion.div>
-                          )}
-                          </div>
-                        </motion.div>
-                      </div>
-                    );
-                  })}
-                </div>
+                {/* Steps */}
+                {section.steps.map((step, stepIndex) => (
+                  <ScrollingStoryStep
+                    key={step.number}
+                    step={step}
+                    isMobile={isMobile}
+                    isTablet={isTablet}
+                    activeImageIndex={activeImageIndex}
+                    stepIndex={sectionStepStart + stepIndex}
+                    totalSteps={totalSteps}
+                  />
+                ))}
               </div>
-            ))}
-          </div>
+            );
+          })}
         </section>
 
         {/* CTA SECTION */}
@@ -835,16 +1712,21 @@ export default function TutorialPage() {
           style={{
             display: 'flex',
             justifyContent: 'center',
-            marginTop: '1.25rem',
-            marginBottom: '2.5rem',
-            padding: isMobile ? '0 1rem' : '0',
+            padding: isMobile ? '3rem 1rem' : '4rem 0',
+            background: 'linear-gradient(to bottom, #ffffff, #f8fafc)',
           }}
         >
-          <button
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
             onClick={() => (window.location.href = 'https://geo-track-em3s.onrender.com/dashboard')}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
             style={{
               padding: isMobile ? '1rem 2rem' : isTablet ? '1.125rem 3rem' : '1.25rem 3.5rem',
-              background: 'rgb(30, 41, 59)',
+              background: 'linear-gradient(135deg, rgb(30, 41, 59), rgb(15, 23, 42))',
               color: 'white',
               borderRadius: '1rem',
               border: 'none',
@@ -860,33 +1742,27 @@ export default function TutorialPage() {
               whiteSpace: 'nowrap',
               width: isMobile ? '100%' : 'auto',
               justifyContent: 'center',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgb(15, 23, 42)';
-              e.currentTarget.style.transform = 'scale(1.04)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgb(30, 41, 59)';
-              e.currentTarget.style.transform = 'scale(1)';
+              position: 'relative',
+              overflow: 'hidden',
             }}
           >
-            Go to Dashboard
-            <ArrowRight style={{ width: isMobile ? '1.4rem' : '1.6rem', height: isMobile ? '1.4rem' : '1.6rem' }} />
-          </button>
+            <motion.div
+              animate={{
+                x: ['-100%', '100%'],
+              }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+              }}
+            />
+            <span style={{ position: 'relative', zIndex: 1 }}>Go to Dashboard</span>
+            <ArrowRight style={{ width: isMobile ? '1.4rem' : '1.6rem', height: isMobile ? '1.4rem' : '1.6rem', position: 'relative', zIndex: 1 }} />
+          </motion.button>
         </div>
         <Footer />
       </div>
-
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-      `}</style>
     </div>
   );
 }
