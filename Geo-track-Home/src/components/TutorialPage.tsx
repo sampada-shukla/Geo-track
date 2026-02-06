@@ -931,35 +931,53 @@ useEffect(() => {
                   {step.description}
                 </p>
 
-                {step.details && (
-                  <ul
+                {step.warning && (
+                  <div
                     style={{
                       marginTop: '1rem',
-                      paddingLeft: '0',
-                      listStyle: 'none',
+                      padding: '0.75rem',
+                      background: 'rgba(239, 68, 68, 0.1)',
+                      border: '1px solid rgba(239, 68, 68, 0.3)',
+                      borderRadius: '0.5rem',
                     }}
                   >
-                    {step.details.map((d, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        style={{
-                          fontSize: isMobile ? '0.8rem' : '0.85rem',
-                          color: 'rgba(255,255,255,0.8)',
-                          marginBottom: '0.5rem',
-                          fontFamily: '"Inter", sans-serif',
-                          display: 'flex',
-                          alignItems: 'flex-start',
-                          gap: '0.5rem',
-                        }}
-                      >
-                        <Zap size={14} color={step.iconColor} style={{ marginTop: '2px', flexShrink: 0 }} />
-                        <span>{d}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
+                    <div
+                      style={{
+                        fontSize: isMobile ? '0.85rem' : '0.9rem',
+                        fontWeight: 700,
+                        color: 'rgba(255,255,255,0.95)',
+                        marginBottom: '0.5rem',
+                        fontFamily: '"Inter", sans-serif',
+                      }}
+                    >
+                      ⚠️ {step.warning.title}
+                    </div>
+                    <ul
+                      style={{
+                        marginTop: '0.5rem',
+                        paddingLeft: '0',
+                        listStyle: 'none',
+                      }}
+                    >
+                      {step.warning.points.map((point, i) => (
+                        <li
+                          key={i}
+                          style={{
+                            fontSize: isMobile ? '0.75rem' : '0.8rem',
+                            color: 'rgba(255,255,255,0.8)',
+                            marginBottom: '0.25rem',
+                            fontFamily: '"Inter", sans-serif',
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: '0.5rem',
+                          }}
+                        >
+                          <span style={{ marginTop: '2px' }}>•</span>
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </motion.div>
             )}
@@ -1129,22 +1147,7 @@ useEffect(() => {
               {step.title}
             </h4>
 
-            {/* Description */}
-            <p
-              style={{
-                fontFamily: '"Inter", sans-serif',
-                fontSize: isMobile ? '15px' : '16px',
-                color: 'rgb(71, 85, 105)',
-                lineHeight: 1.7,
-                marginBottom: step.details ? '1.25rem' : '0',
-                position: 'relative',
-                zIndex: 1,
-              }}
-            >
-              {step.description}
-            </p>
-
-            {/* Details */}
+            {/* Details - Show bullet points in text card */}
             {step.details && (
               <div
                 style={{
@@ -1345,11 +1348,11 @@ export default function TutorialPage() {
       </div>
 
       <div style={{ position: 'relative', zIndex: 10, width: '100%' }}>
-        {/* Hero Section */}
+        {/* Hero Section - UPDATED WITH REDUCED PADDING */}
         <section
           style={{
-            padding: isMobile ? '2rem 1rem' : isTablet ? '2.5rem 1.5rem' : '3rem 1.5rem',
-            minHeight: isMobile ? 'auto' : '500px',
+            padding: isMobile ? '1rem 1rem 2rem' : isTablet ? '1.5rem 1.5rem 2.5rem' : '2rem 1.5rem 3rem',
+            minHeight: isMobile ? 'auto' : '480px',
             display: 'flex',
             alignItems: 'center',
             background: 'linear-gradient(135deg, #ecfeff 0%, #ffffff 50%, #ecfeff 100%)',
@@ -1380,16 +1383,16 @@ export default function TutorialPage() {
                   transition={{ duration: 0.7, delay: 0.05 }}
                   style={{
                     display: 'flex',
-                    alignItems: 'centre',
+                    alignItems: 'center',
                     justifyContent: 'flex-start',
-                    marginBottom: '1rem',
+                    marginBottom: '0.5rem',
                   }}
                 >
                   <img
                     src={logoImage}
                     alt="Geotrack Logo"
                     style={{
-                      width: '14rem',
+                      width: '12rem',
                       height: 'auto',
                       objectFit: 'contain',
                     }}
@@ -1404,7 +1407,7 @@ export default function TutorialPage() {
                     width: '100%', 
                     display: 'flex', 
                     justifyContent: 'center', 
-                    marginTop: '1.25rem',
+                    marginTop: '1rem',
                   }}
                 >
                   <TutorialVideo />
@@ -1415,7 +1418,7 @@ export default function TutorialPage() {
               <div
                 style={{
                   maxWidth: isMobile ? '100%' : '650px',
-                  marginTop: isMobile ? '0' : '-2.5rem',
+                  marginTop: isMobile ? '0.5rem' : '0',
                 }}
               >
                 <motion.h1
@@ -1424,11 +1427,11 @@ export default function TutorialPage() {
                   transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
                   style={{
                     fontFamily: '"Poppins", sans-serif',
-                    fontSize: isMobile ? '28px' : isTablet ? '36px' : '48px',
+                    fontSize: isMobile ? '26px' : isTablet ? '34px' : '46px',
                     fontWeight: 700,
-                    marginTop:'1rem',
+                    marginTop: isMobile ? '0.5rem' : '0',
                     marginBottom: '1rem',
-                    lineHeight: isMobile ? '38px' : isTablet ? '46px' : '58px',
+                    lineHeight: isMobile ? '36px' : isTablet ? '44px' : '56px',
                     letterSpacing: '-0.025em',
                   }}
                 >
@@ -1441,15 +1444,15 @@ export default function TutorialPage() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'flex-start',
-                        marginLeft: '-4rem',
-                        marginBottom: '-1.5rem',
+                        marginLeft: '-2rem',
+                        marginBottom: '-2rem',
                       }}
                     >
                       <img
                         src={logoImage}
                         alt="Geotrack Logo"
                         style={{
-                          width: isTablet ? '16rem' : '20rem',
+                          width: isTablet ? '14rem' : '18rem',
                           height: 'auto',
                           objectFit: 'contain',
                         }}
@@ -1470,8 +1473,8 @@ export default function TutorialPage() {
                     fontSize: isMobile ? '14px' : '16px',
                     fontWeight: 400,
                     color: '#475569',
-                    marginTop: '-0.75rem',
-                    marginBottom: '1.5rem',
+                    marginTop: '-0.5rem',
+                    marginBottom: '1.25rem',
                     lineHeight: isMobile ? '22px' : '26px',
                   }}
                 >
@@ -1479,7 +1482,7 @@ export default function TutorialPage() {
                   covering setup, configuration, and advanced features.
                 </motion.p>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   {[
                     'Quick start guides for instant setup',
                     'Advanced feature walkthroughs',
@@ -1490,7 +1493,7 @@ export default function TutorialPage() {
                       initial={{ opacity: 0, x: -40 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.7, delay: 0.3 + idx * 0.1 }}
-                      style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}
                     >
                       <div
                         style={{
@@ -1536,7 +1539,7 @@ export default function TutorialPage() {
                     width: '100%', 
                     display: 'flex', 
                     justifyContent: 'center', 
-                    marginTop: '4rem',
+                    marginTop: '2rem',
                   }}
                   animate={{ y: [0, -12, 0] }}
                   transition={{
@@ -1593,7 +1596,6 @@ export default function TutorialPage() {
                 fontFamily: '"Inter", sans-serif',
                 fontSize: isMobile ? '15px' : '17px',
                 color: '#475569',
-                maxWidth: '720px',
                 margin: '0 auto',
                 lineHeight: isMobile ? '23px' : '26px',
                 fontWeight: 400,
@@ -1601,6 +1603,38 @@ export default function TutorialPage() {
             >
               Master Geotrack with our comprehensive guide covering every feature from sign-up to advanced functionality
             </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              style={{
+                marginTop: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                padding: isMobile ? '0.75rem 1.25rem' : '1rem 1.5rem',
+                background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(59, 130, 246, 0.1))',
+                border: '2px solid rgba(6, 182, 212, 0.3)',
+                borderRadius: '12px',
+                maxWidth: '600px',
+                margin: '1.5rem auto 0',
+              }}
+            >
+              <Eye color="rgb(6, 182, 212)" size={isMobile ? 20 : 24} strokeWidth={2.5} />
+              <span
+                style={{
+                  fontFamily: '"Inter", sans-serif',
+                  fontSize: isMobile ? '14px' : '16px',
+                  color: 'rgb(15, 23, 42)',
+                  fontWeight: 600,
+                }}
+              >
+                {isMobile ? 'Tap' : 'Hover over'} the screenshots below to see detailed step information
+              </span>
+            </motion.div>
           </div>
         </section>
 
@@ -1716,50 +1750,53 @@ export default function TutorialPage() {
             background: 'linear-gradient(to bottom, #ffffff, #f8fafc)',
           }}
         >
-          <motion.button
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            onClick={() => (window.location.href = 'https://geo-track-em3s.onrender.com/dashboard')}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
-            style={{
-              padding: isMobile ? '1rem 2rem' : isTablet ? '1.125rem 3rem' : '1.25rem 3.5rem',
-              background: 'linear-gradient(135deg, rgb(30, 41, 59), rgb(15, 23, 42))',
-              color: 'white',
-              borderRadius: '1rem',
-              border: 'none',
-              fontSize: isMobile ? '1rem' : '1.125rem',
-              fontWeight: 700,
-              lineHeight: 1.3,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              boxShadow: '0 12px 30px rgba(0,0,0,0.25)',
-              transition: 'all 0.3s',
-              whiteSpace: 'nowrap',
-              width: isMobile ? '100%' : 'auto',
-              justifyContent: 'center',
-              position: 'relative',
-              overflow: 'hidden',
-            }}
           >
-            <motion.div
-              animate={{
-                x: ['-100%', '100%'],
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            <button
+              onClick={() => window.location.href = 'https://geo-track-em3s.onrender.com/dashboard'}
               style={{
-                position: 'absolute',
-                inset: 0,
-                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+                padding: isMobile ? '1rem 2rem' : isTablet ? '1.125rem 3rem' : '1.25rem 3.5rem',
+                background: 'linear-gradient(135deg, rgb(30, 41, 59), rgb(15, 23, 42))',
+                color: 'white',
+                borderRadius: '1rem',
+                border: 'none',
+                fontSize: isMobile ? '1rem' : '1.125rem',
+                fontWeight: 700,
+                lineHeight: 1.3,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                boxShadow: '0 12px 30px rgba(0,0,0,0.25)',
+                transition: 'all 0.3s',
+                whiteSpace: 'nowrap',
+                width: isMobile ? '100%' : 'auto',
+                justifyContent: 'center',
+                position: 'relative',
+                overflow: 'hidden',
               }}
-            />
-            <span style={{ position: 'relative', zIndex: 1 }}>Go to Dashboard</span>
-            <ArrowRight style={{ width: isMobile ? '1.4rem' : '1.6rem', height: isMobile ? '1.4rem' : '1.6rem', position: 'relative', zIndex: 1 }} />
-          </motion.button>
+            >
+              <motion.div
+                animate={{
+                  x: ['-100%', '100%'],
+                }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+                }}
+              />
+              <span style={{ position: 'relative', zIndex: 1 }}>Go to Dashboard</span>
+              <ArrowRight style={{ width: isMobile ? '1.4rem' : '1.6rem', height: isMobile ? '1.4rem' : '1.6rem', position: 'relative', zIndex: 1 }} />
+            </button>
+          </motion.div>
         </div>
         <Footer />
       </div>
