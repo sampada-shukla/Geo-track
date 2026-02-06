@@ -85,8 +85,6 @@ const tutorialSections = [
           points: [
             'Generic email services (Gmail, Yahoo, Outlook) are detected as Trial Accounts',
             'Trial users can only view the app - core features disabled',
-            'Admin-approved domain email is mandatory',
-            'Full app access enabled only after domain validation',
           ],
         },
         icon: Shield,
@@ -1348,11 +1346,11 @@ export default function TutorialPage() {
       </div>
 
       <div style={{ position: 'relative', zIndex: 10, width: '100%' }}>
-        {/* Hero Section - UPDATED WITH REDUCED PADDING */}
+        {/* Hero Section */}
         <section
           style={{
-            padding: isMobile ? '1rem 1rem 2rem' : isTablet ? '1.5rem 1.5rem 2.5rem' : '2rem 1.5rem 3rem',
-            minHeight: isMobile ? 'auto' : '480px',
+            padding: isMobile ? '2rem 1rem' : isTablet ? '2.5rem 1.5rem' : '1rem 1.5rem',
+            minHeight: isMobile ? 'auto' : '500px',
             display: 'flex',
             alignItems: 'center',
             background: 'linear-gradient(135deg, #ecfeff 0%, #ffffff 50%, #ecfeff 100%)',
@@ -1383,16 +1381,16 @@ export default function TutorialPage() {
                   transition={{ duration: 0.7, delay: 0.05 }}
                   style={{
                     display: 'flex',
-                    alignItems: 'center',
+                    alignItems: 'centre',
                     justifyContent: 'flex-start',
-                    marginBottom: '0.5rem',
+                    marginBottom: '1rem',
                   }}
                 >
                   <img
                     src={logoImage}
                     alt="Geotrack Logo"
                     style={{
-                      width: '12rem',
+                      width: '14rem',
                       height: 'auto',
                       objectFit: 'contain',
                     }}
@@ -1407,7 +1405,7 @@ export default function TutorialPage() {
                     width: '100%', 
                     display: 'flex', 
                     justifyContent: 'center', 
-                    marginTop: '1rem',
+                    marginTop: '1.25rem',
                   }}
                 >
                   <TutorialVideo />
@@ -1418,7 +1416,7 @@ export default function TutorialPage() {
               <div
                 style={{
                   maxWidth: isMobile ? '100%' : '650px',
-                  marginTop: isMobile ? '0.5rem' : '0',
+                  marginTop: isMobile ? '0' : '-2.5rem',
                 }}
               >
                 <motion.h1
@@ -1427,11 +1425,11 @@ export default function TutorialPage() {
                   transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
                   style={{
                     fontFamily: '"Poppins", sans-serif',
-                    fontSize: isMobile ? '26px' : isTablet ? '34px' : '46px',
+                    fontSize: isMobile ? '28px' : isTablet ? '36px' : '48px',
                     fontWeight: 700,
-                    marginTop: isMobile ? '0.5rem' : '0',
+                    marginTop:'1rem',
                     marginBottom: '1rem',
-                    lineHeight: isMobile ? '36px' : isTablet ? '44px' : '56px',
+                    lineHeight: isMobile ? '38px' : isTablet ? '46px' : '58px',
                     letterSpacing: '-0.025em',
                   }}
                 >
@@ -1444,15 +1442,15 @@ export default function TutorialPage() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'flex-start',
-                        marginLeft: '-2rem',
-                        marginBottom: '-2rem',
+                        marginLeft: '-4rem',
+                        marginBottom: '-2.5rem'
                       }}
                     >
                       <img
                         src={logoImage}
                         alt="Geotrack Logo"
                         style={{
-                          width: isTablet ? '14rem' : '18rem',
+                          width: isTablet ? '16rem' : '20rem',
                           height: 'auto',
                           objectFit: 'contain',
                         }}
@@ -1473,8 +1471,8 @@ export default function TutorialPage() {
                     fontSize: isMobile ? '14px' : '16px',
                     fontWeight: 400,
                     color: '#475569',
-                    marginTop: '-0.5rem',
-                    marginBottom: '1.25rem',
+                    marginTop: '-0.75rem',
+                    marginBottom: '1.5rem',
                     lineHeight: isMobile ? '22px' : '26px',
                   }}
                 >
@@ -1482,7 +1480,7 @@ export default function TutorialPage() {
                   covering setup, configuration, and advanced features.
                 </motion.p>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                   {[
                     'Quick start guides for instant setup',
                     'Advanced feature walkthroughs',
@@ -1493,7 +1491,7 @@ export default function TutorialPage() {
                       initial={{ opacity: 0, x: -40 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.7, delay: 0.3 + idx * 0.1 }}
-                      style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}
                     >
                       <div
                         style={{
@@ -1531,29 +1529,6 @@ export default function TutorialPage() {
                   ))}
                 </div>
               </div>
-
-              {/* Video for desktop/tablet */}
-              {!isMobile && (
-                <motion.div
-                  style={{ 
-                    width: '100%', 
-                    display: 'flex', 
-                    justifyContent: 'center', 
-                    marginTop: '2rem',
-                  }}
-                  animate={{ y: [0, -12, 0] }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
-                >
-                  <TutorialVideo />
-                </motion.div>
-              )}
-            </div>
-          </div>
-        </section>
 
         {/* Tutorial Section Header */}
         <section
