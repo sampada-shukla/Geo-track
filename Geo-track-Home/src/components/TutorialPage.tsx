@@ -1566,7 +1566,7 @@ export default function TutorialPage() {
                     lineHeight: isMobile ? '22px' : '26px',
                   }}
                 >
-               Learn how to discover nearby clients, plan meetings, and track field visits with tutorials covering client mapping,and visit tracking.
+               Learn how to discover nearby clients, plan meetings, and track field <br/> visits with tutorials covering client mapping,and visit tracking.
                 </motion.p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
