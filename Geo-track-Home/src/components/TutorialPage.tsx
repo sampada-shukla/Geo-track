@@ -1506,7 +1506,7 @@ export default function TutorialPage() {
                 style={{
                   maxWidth: isMobile ? '100%' : '650px',
                   marginTop: isMobile ? '0' : '-2.5rem',
-                   marginLeft: isMobile ? '0' : '-3rem',
+                   marginLeft: isMobile ? '0' : '-4rem',
                 }}
               >
                 <motion.h1
