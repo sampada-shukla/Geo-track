@@ -1567,8 +1567,7 @@ export default function TutorialPage() {
                     lineHeight: isMobile ? '22px' : '26px',
                   }}
                 >
-                  Learn how to streamline operations, boost productivity, and scale faster with comprehensive tutorials
-                  covering setup, configuration, and advanced features.
+               Learn how to discover nearby clients, plan meetings efficiently, and track field visits with comprehensive tutorials covering client mapping, scheduling, visit tracking, and performance insights.
                 </motion.p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
