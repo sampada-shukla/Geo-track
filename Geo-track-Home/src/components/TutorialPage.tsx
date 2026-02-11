@@ -1486,11 +1486,9 @@ export default function TutorialPage() {
     }}
   />
 </div>
-
-              )}
-
-              {/* Video - appears second on mobile */}
-              {isMobile && (
+)}
+{/* Video - appears second on mobile */}
+{isMobile && (
                 <motion.div
                   style={{ 
                     width: '100%', 
@@ -1567,7 +1565,7 @@ export default function TutorialPage() {
                     lineHeight: isMobile ? '22px' : '26px',
                   }}
                 >
-               Learn how to discover nearby clients, plan meetings efficiently, and track field visits with comprehensive tutorials covering client mapping, scheduling, visit tracking, and performance insights.
+               Learn how to discover nearby clients, plan meetings, and track field visits with comprehensive tutorials covering client mapping,scheduling and visit tracking.
                 </motion.p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
