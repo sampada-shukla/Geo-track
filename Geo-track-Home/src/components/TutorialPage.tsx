@@ -1605,10 +1605,10 @@ export default function TutorialPage() {
                       <span
                         style={{
                           fontFamily: "'Inter', sans-serif",
-                          fontSize: isMobile ? '14px' : '16px',
+                          fontSize: isMobile ? '18px' : '19px',
                           fontWeight: 500,
                           color: '#475569',
-                          lineHeight: isMobile ? '22px' : '26px',
+                          lineHeight: isMobile ? '28px' : '30px',
                         }}
                       >
                         {feature}
