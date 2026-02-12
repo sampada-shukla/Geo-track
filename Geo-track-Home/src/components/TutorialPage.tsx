@@ -983,89 +983,58 @@ useEffect(() => {
                 >
                   {step.description}
                 </p>
-
-                {/*{step.details && (
-                  <ul
-                    style={{
-                      marginTop: '1rem',
-                      paddingLeft: '0',
-                      listStyle: 'none',
-                    }}
-                  >
-                    {step.details.map((d, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        style={{
-                          fontSize: isMobile ? '0.8rem' : '0.85rem',
-                          color: 'rgba(255,255,255,0.8)',
-                          marginBottom: '0.5rem',
-                          fontFamily: '"Inter", sans-serif',
-                          display: 'flex',
-                          alignItems: 'flex-start',
-                          gap: '0.5rem',
-                        }}
-                      >
-                        <Zap size={14} color={step.iconColor} style={{ marginTop: '2px', flexShrink: 0 }} />
-                        <span>{d}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                )}*/}
-                {step.warning && (
-                  <div
-                    style={{
-                      marginTop: '1rem',
-                      padding: '0.75rem',
-                      background: 'rgba(239, 68, 68, 0.1)',
-                      border: '1px solid rgba(239, 68, 68, 0.3)',
-                      borderRadius: '0.5rem',
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: isMobile ? '0.85rem' : '0.9rem',
-                        fontWeight: 700,
-                        color: 'rgba(255,255,255,0.95)',
-                        marginBottom: '0.5rem',
-                        fontFamily: '"Inter", sans-serif',
-                      }}
-                    >
-                      ⚠️ {step.warning.title}
-                    </div>
-                    <ul
-                      style={{
-                        marginTop: '0.5rem',
-                        paddingLeft: '0',
-                        listStyle: 'none',
-                      }}
-                    >
-                      {step.warning.points.map((point, i) => (
-                        <li
-                          key={i}
-                          style={{
-                            fontSize: isMobile ? '0.75rem' : '0.8rem',
-                            color: 'rgba(255,255,255,0.8)',
-                            marginBottom: '0.25rem',
-                            fontFamily: '"Inter", sans-serif',
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            gap: '0.5rem',
-                          }}
-                        >
-                          <span style={{ marginTop: '2px' }}>•</span>
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+{step.warning && (
+  <div
+  style={{
+  marginTop: '1rem',
+  padding: '0.75rem',
+  background: 'rgba(239, 68, 68, 0.1)',
+  border: '1px solid rgba(239, 68, 68, 0.3)',
+  borderRadius: '0.5rem',
+  }}
+  >
+  <div
+  style={{
+  fontSize: isMobile ? '0.85rem' : '0.9rem',
+  fontWeight: 700,
+  color: 'rgba(255,255,255,0.95)',
+  marginBottom: '0.5rem',
+  fontFamily: '"Inter", sans-serif',
+}}
+>
+  {step.warning.title}
+    </div>
+    <ul
+    style={{
+    marginTop: '0.5rem',
+    paddingLeft: '0',
+    listStyle: 'none',
+}}
+>
+{step.warning.points.map((point, i) => (
+<li
+key={i}
+style={{
+fontSize: isMobile ? '0.75rem' : '0.8rem',
+color: 'rgba(255,255,255,0.8)',
+marginBottom: '0.25rem',
+fontFamily: '"Inter", sans-serif',
+display: 'flex',
+alignItems: 'flex-start',
+gap: '0.5rem',
+}}
+  >
+<span style={{ marginTop: '2px' }}>•</span>
+<span>{point}</span>
+</li>
+))}
+</ul>
+  </div>
+  )}
+</motion.div>
+    )}
+    </AnimatePresence>
+    </motion.div>
 
         {/* Text Side - Enhanced */}
         <motion.div
@@ -1460,7 +1429,7 @@ export default function TutorialPage() {
               style={{
                 display: isMobile ? 'flex' : 'grid',
                 flexDirection: isMobile ? 'column' : undefined,
-                      gridTemplateColumns: isMobile ? undefined : isTablet ? '1fr' : '1.1fr 0.9fr',
+                gridTemplateColumns: isMobile ? undefined : isTablet ? '1fr' : '1.1fr 0.9fr',
                 gap: isMobile ? '0rem' : isTablet ? '2.5rem' : '3rem',
                 alignItems: 'start',
               }}
@@ -1705,7 +1674,7 @@ export default function TutorialPage() {
     margin: '1.25rem auto 0',
     maxWidth: 'fit-content',
 
-    // 👇 BOX STYLES
+    // BOX STYLES
     background:
       'linear-gradient(135deg, rgba(6,182,212,0.12), rgba(59,130,246,0.12))',
     border: '1.5px solid rgba(6,182,212,0.35)',
@@ -1776,7 +1745,7 @@ export default function TutorialPage() {
         {/* Scrolling Story Steps */}
         <section
           style={{
-            background: 'linear-gradient(180deg, #f0fbff 0%, #f8fafc 100% )',
+            background: '#f0fdff',
             position: 'relative',
           }}
         >
